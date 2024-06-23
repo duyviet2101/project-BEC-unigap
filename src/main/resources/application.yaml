@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: project-BEC-unigap
+  datasource:
+    url: 'jdbc:mysql://localhost:3306/job_db'
+    username: root
+    password: 21012004VIEt@
