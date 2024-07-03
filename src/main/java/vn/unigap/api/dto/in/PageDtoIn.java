@@ -9,7 +9,7 @@ import lombok.experimental.FieldDefaults;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class PageRequest {
+public class PageDtoIn {
     @NotNull
     @Min(value = 1)
     Integer page = 1;

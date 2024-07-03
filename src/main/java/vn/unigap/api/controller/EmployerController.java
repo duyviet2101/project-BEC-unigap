@@ -4,65 +4,59 @@ import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import vn.unigap.api.dto.in.EmployerCreationRequest;
-import vn.unigap.api.dto.in.EmployerUpdateRequest;
-import vn.unigap.api.dto.in.PageRequest;
-import vn.unigap.api.dto.out.ApiResponse;
-import vn.unigap.api.dto.out.EmployerResponse;
-import vn.unigap.api.dto.out.PagingResponse;
+import vn.unigap.api.dto.in.EmployerDtoIn;
+import vn.unigap.api.dto.in.PageDtoIn;
+import vn.unigap.api.dto.in.UpdateEmployerDtoIn;
 import vn.unigap.api.service.EmployerService;
+import vn.unigap.common.controller.AbstractResponseController;
 
 import java.math.BigInteger;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/employers")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class EmployerController {
+public class EmployerController extends AbstractResponseController {
     EmployerService employerService;
 
-    @PostMapping
-    ApiResponse<EmployerResponse> createEmployer(@Valid @RequestBody EmployerCreationRequest request) {
-        ApiResponse<EmployerResponse> apiResponse = new ApiResponse<>();
-
-        apiResponse.setObject(employerService.createEmployer(request));
-        apiResponse.setMessage("Create Employer Success!");
-
-        return apiResponse;
+    @GetMapping(value = "")
+    public ResponseEntity<?> list(@Valid PageDtoIn pageDtoIn) {
+        return responseEntity(() -> {
+            return this.employerService.list(pageDtoIn);
+        });
     }
 
-    @PutMapping("/{id}")
-    ApiResponse<EmployerResponse> updateEmployer(@PathVariable(value = "id") BigInteger employerId, @Valid @RequestBody EmployerUpdateRequest request) {
-        ApiResponse<EmployerResponse> apiResponse = new ApiResponse<>();
-
-        apiResponse.setObject(employerService.updateEmployer(employerId, request));
-        apiResponse.setMessage("Update Employer Success!");
-
-        return apiResponse;
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<?> get(@PathVariable(value = "id") BigInteger id) {
+        return responseEntity(() -> {
+            return this.employerService.get(id);
+        });
     }
 
-    @GetMapping("/{id}")
-    ApiResponse<EmployerResponse> getEmployer(@PathVariable(value = "id") BigInteger employerId) {
-        return ApiResponse.<EmployerResponse>builder()
-                .object(employerService.getEmployer(employerId))
-                .message("Get employer success!")
-                .build();
+    @PostMapping(value = "")
+    public ResponseEntity<?> create(@RequestBody @Valid EmployerDtoIn employerDtoIn) {
+        return responseEntity(() -> {
+           return this.employerService.create(employerDtoIn);
+        }, HttpStatus.CREATED);
     }
 
-    @GetMapping("")
-    ApiResponse<PagingResponse<EmployerResponse>> getEmployers(PageRequest pageRequest) {
-        return ApiResponse.<PagingResponse<EmployerResponse>>builder()
-                .object(employerService.getEmployers(pageRequest.getPage(), pageRequest.getPageSize()))
-                .message("Get list success!")
-                .build();
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<?> update(@PathVariable(value = "id") BigInteger id,
+                                    @RequestBody @Valid UpdateEmployerDtoIn updateEmployerDtoIn) {
+        return responseEntity(() -> {
+            return this.employerService.update(id, updateEmployerDtoIn);
+        });
     }
 
-    @DeleteMapping("/{id}")
-    ApiResponse deleteEmployer(@PathVariable(value = "id") BigInteger employerId) {
-        employerService.deleteEmployer(employerId);
-        return ApiResponse.builder()
-                .message("Deleted!")
-                .build();
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<?> delete(@PathVariable(value = "id") BigInteger id) {
+        return responseEntity(() -> {
+            this.employerService.delete(id);
+            return new HashMap<>();
+        });
     }
 }

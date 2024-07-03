@@ -1,14 +1,12 @@
 package vn.unigap.api.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.math.BigInteger;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Data
@@ -18,12 +16,27 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Employer {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     BigInteger id;
+
+    @Column(name = "email", unique = true)
     String email;
+
+    @Column(name = "name")
     String name;
+
+    @Column(name = "province")
     Integer province;
+
+    @Column(name = "description")
     String description;
-    LocalDateTime createdAt;
-    LocalDateTime updatedAt;
+
+    @Column(name = "created_at")
+    @Builder.Default
+    Date createdAt = new Date();
+
+    @Column(name = "updated_at")
+    @Builder.Default
+    Date updatedAt = new Date();
 }
