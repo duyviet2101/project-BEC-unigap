@@ -3,6 +3,8 @@ package vn.unigap.api.service;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -25,6 +27,7 @@ import java.math.BigInteger;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class EmployerServiceImpl implements EmployerService {
+    private static final Logger log = LoggerFactory.getLogger(EmployerServiceImpl.class);
     EmployerRepository employerRepository;
     EmployerMapper employerMapper;
 
@@ -45,7 +48,7 @@ public class EmployerServiceImpl implements EmployerService {
         Employer employer = employerRepository.save(Employer.builder()
                                 .email(employerDtoIn.getEmail())
                                 .name(employerDtoIn.getName())
-                                .province(employerDtoIn.getProvinceId())
+                                .province(employerDtoIn.getProvince())
                                 .description(employerDtoIn.getDescription())
                                 .build());
 
@@ -55,7 +58,7 @@ public class EmployerServiceImpl implements EmployerService {
     @Override
     public EmployerDtoOut get(BigInteger id) {
         Employer employer = employerRepository.findById(id)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "User not found!"));
+                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "Employer not found!"));
 
         return EmployerDtoOut.from(employer);
     }
@@ -63,7 +66,7 @@ public class EmployerServiceImpl implements EmployerService {
     @Override
     public EmployerDtoOut update(BigInteger id, UpdateEmployerDtoIn updateEmployerDtoIn) {
         Employer employer = employerRepository.findById(id)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "User not found"));
+                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "Employer not found"));
 
         employerMapper.updateEmployer(employer, updateEmployerDtoIn);
 
@@ -75,7 +78,7 @@ public class EmployerServiceImpl implements EmployerService {
     @Override
     public void delete(BigInteger id) {
         Employer employer = employerRepository.findById(id)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "User not found"));
+                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "Employer not found"));
 
         employerRepository.delete(employer);
     }

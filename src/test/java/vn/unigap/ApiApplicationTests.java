@@ -1,4 +1,4 @@
-package vn.unigap.api;
+package vn.unigap;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -8,6 +8,7 @@ class ApiApplicationTests {
 
 	@Test
 	void contextLoads() {
+
 	}
 
 }

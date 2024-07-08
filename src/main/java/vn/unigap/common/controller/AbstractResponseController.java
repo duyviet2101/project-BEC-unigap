@@ -11,6 +11,6 @@ public class AbstractResponseController {
 
     public <T> ResponseEntity<ApiResponse<T>> responseEntity(CallbackFunction<T> callback, HttpStatus status) {
         T result = callback.execute();
-        return ResponseEntity.status(status).body(ApiResponse.success(result));
+        return ResponseEntity.status(status).body(ApiResponse.success(result, status));
     }
 }

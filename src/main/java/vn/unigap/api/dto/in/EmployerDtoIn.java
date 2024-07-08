@@ -13,7 +13,7 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class EmployerDtoIn {
-    @Email
+    @Email(message = "Email should be valid")
     @NotEmpty
     @Size(max = 255)
     String email;
@@ -23,7 +23,7 @@ public class EmployerDtoIn {
     String name;
 
     @NotNull
-    Integer provinceId;
+    Integer province;
 
     String description;
 }
