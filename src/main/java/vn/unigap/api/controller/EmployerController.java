@@ -40,7 +40,8 @@ public class EmployerController extends AbstractResponseController {
     @PostMapping(value = "")
     public ResponseEntity<?> create(@RequestBody @Valid EmployerDtoIn employerDtoIn) {
         return responseEntity(() -> {
-           return this.employerService.create(employerDtoIn);
+           this.employerService.create(employerDtoIn);
+           return new HashMap<>();
         }, HttpStatus.CREATED);
     }
 
@@ -48,7 +49,8 @@ public class EmployerController extends AbstractResponseController {
     public ResponseEntity<?> update(@PathVariable(value = "id") BigInteger id,
                                     @RequestBody @Valid UpdateEmployerDtoIn updateEmployerDtoIn) {
         return responseEntity(() -> {
-            return this.employerService.update(id, updateEmployerDtoIn);
+            this.employerService.update(id, updateEmployerDtoIn);
+            return new HashMap<>();
         });
     }
 

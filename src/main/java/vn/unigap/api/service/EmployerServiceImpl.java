@@ -22,6 +22,7 @@ import vn.unigap.common.errorcode.ErrorCode;
 import vn.unigap.common.exception.ApiException;
 
 import java.math.BigInteger;
+import java.util.Date;
 
 @Service
 @RequiredArgsConstructor
@@ -40,19 +41,17 @@ public class EmployerServiceImpl implements EmployerService {
     }
 
     @Override
-    public EmployerDtoOut create(EmployerDtoIn employerDtoIn) {
+    public void create(EmployerDtoIn employerDtoIn) {
         employerRepository.findByEmail(employerDtoIn.getEmail()).ifPresent(employer -> {
             throw new ApiException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "Email already existed!");
         });
 
-        Employer employer = employerRepository.save(Employer.builder()
-                                .email(employerDtoIn.getEmail())
-                                .name(employerDtoIn.getName())
-                                .province(employerDtoIn.getProvince())
-                                .description(employerDtoIn.getDescription())
-                                .build());
-
-        return EmployerDtoOut.from(employer);
+        employerRepository.save(Employer.builder()
+            .email(employerDtoIn.getEmail())
+            .name(employerDtoIn.getName())
+            .province(employerDtoIn.getProvince())
+            .description(employerDtoIn.getDescription())
+            .build());
     }
 
     @Override
@@ -64,15 +63,14 @@ public class EmployerServiceImpl implements EmployerService {
     }
 
     @Override
-    public EmployerDtoOut update(BigInteger id, UpdateEmployerDtoIn updateEmployerDtoIn) {
+    public void update(BigInteger id, UpdateEmployerDtoIn updateEmployerDtoIn) {
         Employer employer = employerRepository.findById(id)
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "Employer not found"));
 
         employerMapper.updateEmployer(employer, updateEmployerDtoIn);
+        employer.setUpdatedAt(new Date());
 
-        employer = employerRepository.save(employer);
-
-        return EmployerDtoOut.from(employer);
+        employerRepository.save(employer);
     }
 
     @Override
@@ -81,5 +79,12 @@ public class EmployerServiceImpl implements EmployerService {
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "Employer not found"));
 
         employerRepository.delete(employer);
+    }
+
+    @Override
+    public String getEmployerNameById(BigInteger id) {
+        Employer employer = employerRepository.findById(id)
+                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "Employer not found"));
+        return employer.getName();
     }
 }

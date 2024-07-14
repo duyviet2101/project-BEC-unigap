@@ -71,8 +71,7 @@ public class EmployerControllerTest {
         // GIVEN
         ObjectMapper objectMapper = new ObjectMapper();
         String content = objectMapper.writeValueAsString(employerDtoIn);
-        Mockito.when(employerService.create(ArgumentMatchers.any()))
-                .thenReturn(employerDtoOut);
+        Mockito.doNothing().when(employerService).create(ArgumentMatchers.any(EmployerDtoIn.class));
 
 
         // WHEN,THEN

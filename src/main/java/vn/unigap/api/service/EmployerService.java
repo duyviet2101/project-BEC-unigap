@@ -13,9 +13,11 @@ public interface EmployerService {
 
     EmployerDtoOut get(BigInteger id);
 
-    EmployerDtoOut create(EmployerDtoIn employerDtoIn);
+    void create(EmployerDtoIn employerDtoIn);
 
-    EmployerDtoOut update(BigInteger id, UpdateEmployerDtoIn updateEmployerDtoIn);
+    void update(BigInteger id, UpdateEmployerDtoIn updateEmployerDtoIn);
 
     void delete(BigInteger id);
+
+    String getEmployerNameById(BigInteger id);
 }
