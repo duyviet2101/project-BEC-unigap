@@ -12,10 +12,10 @@ import vn.unigap.api.dto.in.JobDtoIn;
 import vn.unigap.api.dto.in.PageDtoIn;
 import vn.unigap.api.dto.out.JobDtoOut;
 import vn.unigap.api.dto.out.PageDtoOut;
-import vn.unigap.api.entity.Employer;
 import vn.unigap.api.entity.Job;
 import vn.unigap.api.mapper.JobMapper;
-import vn.unigap.api.repository.EmployerRepository;
+import vn.unigap.api.repository.JobFieldRepositoryCustom;
+import vn.unigap.api.repository.JobProvinceRepositoryCustom;
 import vn.unigap.api.repository.JobRepository;
 import vn.unigap.api.repository.JobRepositoryJdbcTemplate;
 import vn.unigap.common.errorcode.ErrorCode;
@@ -29,12 +29,19 @@ import java.util.Date;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class JobServiceImpl implements JobService {
     JobRepository jobRepository;
-    EmployerRepository employerRepository;
     JobMapper jobMapper;
     JobRepositoryJdbcTemplate jobRepositoryJdbcTemplate;
+    JobFieldRepositoryCustom jobFieldRepositoryCustom;
+    JobProvinceRepositoryCustom jobProvinceRepositoryCustom;
 
     @Override
     public void create(JobDtoIn jobDtoIn) {
+        if (!jobFieldRepositoryCustom.checkAllIdsExist(jobDtoIn.getFieldIds()))
+            throw new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "Field ids are invalid!");
+
+        if (!jobProvinceRepositoryCustom.checkAllIdsExist(jobDtoIn.getProvinceIds()))
+            throw new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "Province ids are invalid!");
+
         jobRepository.save(Job.builder()
                         .title(jobDtoIn.getTitle())
                         .employerId(jobDtoIn.getEmployerId())
@@ -49,6 +56,12 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public void update(BigInteger id, JobDtoIn jobDtoIn) {
+        if (!jobFieldRepositoryCustom.checkAllIdsExist(jobDtoIn.getFieldIds()))
+            throw new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "Field ids are invalid!");
+
+        if (!jobProvinceRepositoryCustom.checkAllIdsExist(jobDtoIn.getProvinceIds()))
+            throw new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "Province ids are invalid!");
+
         Job job = jobRepository.findById(id)
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "Job not found"));
 

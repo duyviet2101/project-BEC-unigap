@@ -18,6 +18,4 @@ public interface EmployerService {
     void update(BigInteger id, UpdateEmployerDtoIn updateEmployerDtoIn);
 
     void delete(BigInteger id);
-
-    String getEmployerNameById(BigInteger id);
 }

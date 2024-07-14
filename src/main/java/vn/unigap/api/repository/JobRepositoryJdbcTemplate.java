@@ -99,6 +99,8 @@ public class JobRepositoryJdbcTemplate {
                 .employerId(rs.getBigDecimal("employer_id").toBigInteger())
                 .id(rs.getBigDecimal("A.id").toBigInteger())
                 .employerName(rs.getString("name"))
+                .fields(getFieldsNameByIds(rs.getString("fields")))
+                .provinces(getProvinceByIds(rs.getString("provinces")))
                 .build());
 
         return jobList.isEmpty() ? null : jobList.getFirst();

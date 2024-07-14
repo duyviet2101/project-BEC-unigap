@@ -80,11 +80,4 @@ public class EmployerServiceImpl implements EmployerService {
 
         employerRepository.delete(employer);
     }
-
-    @Override
-    public String getEmployerNameById(BigInteger id) {
-        Employer employer = employerRepository.findById(id)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "Employer not found"));
-        return employer.getName();
-    }
 }

@@ -35,5 +35,6 @@ public class JobDtoIn {
     @NotEmpty
     String provinceIds;
 
+    @NotNull
     Date expiredAt;
 }
