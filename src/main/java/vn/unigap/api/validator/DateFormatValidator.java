@@ -7,14 +7,14 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-public class BirthdayValidator implements ConstraintValidator<Birthday, String> {
+public class DateFormatValidator implements ConstraintValidator<DateFormat, String> {
     @Override
     public boolean isValid(String s, ConstraintValidatorContext constraintValidatorContext) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         try {
             LocalDate.parse(s, formatter);
             return true;
-        } catch (DateTimeParseException e){
+        } catch (Exception e){
             return false;
         }
     }

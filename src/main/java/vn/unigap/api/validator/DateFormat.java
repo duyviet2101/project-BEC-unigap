@@ -10,9 +10,9 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = BirthdayValidator.class)
-public @interface Birthday {
-    String message() default "Birthday is invalid! (must be yyyy-MM-dd)";
+@Constraint(validatedBy = DateFormatValidator.class)
+public @interface DateFormat {
+    String message() default "DateFormat is invalid! (must be yyyy-MM-dd)";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

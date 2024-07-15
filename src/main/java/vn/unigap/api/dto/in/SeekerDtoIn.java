@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import vn.unigap.api.validator.Birthday;
+import vn.unigap.api.validator.DateFormat;
 
 @Data
 @AllArgsConstructor
@@ -16,7 +16,7 @@ public class SeekerDtoIn {
     String name;
 
     @NotEmpty
-    @Birthday
+    @DateFormat
     String birthday;
 
     String address;

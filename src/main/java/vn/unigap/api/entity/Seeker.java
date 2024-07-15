@@ -37,9 +37,9 @@ public class Seeker {
     @CreatedDate
     @Column(name = "created_at")
     @Builder.Default
-    Date created_at = new Date();
+    Date createdAt = new Date();
 
     @UpdateTimestamp
     @Column(name = "updated_at")
-    Date updated_at;
+    Date updatedAt;
 }
