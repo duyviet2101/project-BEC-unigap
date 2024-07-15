@@ -8,4 +8,6 @@ import java.math.BigInteger;
 
 @Repository
 public interface SeekerRepository extends JpaRepository<Seeker, BigInteger> {
+    Seeker getSeekerById(BigInteger id);
+    boolean existsSeekerById(BigInteger id);
 }

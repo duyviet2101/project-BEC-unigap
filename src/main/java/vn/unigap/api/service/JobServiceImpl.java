@@ -17,7 +17,7 @@ import vn.unigap.api.mapper.JobMapper;
 import vn.unigap.api.repository.JobFieldRepositoryCustom;
 import vn.unigap.api.repository.JobProvinceRepositoryCustom;
 import vn.unigap.api.repository.JobRepository;
-import vn.unigap.api.repository.JobRepositoryJdbcTemplate;
+import vn.unigap.api.repository.JobRepositoryCustom;
 import vn.unigap.common.errorcode.ErrorCode;
 import vn.unigap.common.exception.ApiException;
 
@@ -30,17 +30,17 @@ import java.util.Date;
 public class JobServiceImpl implements JobService {
     JobRepository jobRepository;
     JobMapper jobMapper;
-    JobRepositoryJdbcTemplate jobRepositoryJdbcTemplate;
+    JobRepositoryCustom jobRepositoryCustom;
     JobFieldRepositoryCustom jobFieldRepositoryCustom;
     JobProvinceRepositoryCustom jobProvinceRepositoryCustom;
 
     @Override
     public void create(JobDtoIn jobDtoIn) {
         if (!jobFieldRepositoryCustom.checkAllIdsExist(jobDtoIn.getFieldIds()))
-            throw new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "Field ids are invalid!");
+            throw new ApiException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "Field ids are invalid!");
 
         if (!jobProvinceRepositoryCustom.checkAllIdsExist(jobDtoIn.getProvinceIds()))
-            throw new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "Province ids are invalid!");
+            throw new ApiException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "Province ids are invalid!");
 
         jobRepository.save(Job.builder()
                         .title(jobDtoIn.getTitle())
@@ -57,13 +57,13 @@ public class JobServiceImpl implements JobService {
     @Override
     public void update(BigInteger id, JobDtoIn jobDtoIn) {
         if (!jobFieldRepositoryCustom.checkAllIdsExist(jobDtoIn.getFieldIds()))
-            throw new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "Field ids are invalid!");
+            throw new ApiException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "Field ids are invalid!");
 
         if (!jobProvinceRepositoryCustom.checkAllIdsExist(jobDtoIn.getProvinceIds()))
-            throw new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "Province ids are invalid!");
+            throw new ApiException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "Province ids are invalid!");
 
         Job job = jobRepository.findById(id)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "Job not found"));
+                .orElseThrow(() -> new ApiException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "Job not found"));
 
         jobMapper.updateJob(job, jobDtoIn);
         job.setUpdatedAt(new Date());
@@ -73,14 +73,14 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public JobDtoOut get(BigInteger id) {
-        return jobRepositoryJdbcTemplate.getJobWithEmployerName(id);
+        return jobRepositoryCustom.getJobWithEmployerName(id);
     }
 
     @Override
     public PageDtoOut<JobDtoOut> list(PageDtoIn pageDtoIn, BigInteger employerId) {
         //NamedParameterJdbcTemplate
-        Page<JobDtoOut> result = jobRepositoryJdbcTemplate.getJobsWithEmployerNamePaginated(employerId,
-                PageRequest.of(pageDtoIn.getPage() - 1, pageDtoIn.getPageSize(), Sort.by("id")));
+        Page<JobDtoOut> result = jobRepositoryCustom.getJobsWithEmployerNamePaginated(employerId,
+                PageRequest.of(pageDtoIn.getPage() - 1, pageDtoIn.getPageSize(), Sort.by(Sort.Order.desc("expired_at"), Sort.Order.asc("name"))));
 
         return PageDtoOut.from(pageDtoIn.getPage(), pageDtoIn.getPageSize(), result.getTotalElements(), result.getContent());
     }
@@ -88,7 +88,7 @@ public class JobServiceImpl implements JobService {
     @Override
     public void delete(BigInteger id) {
         Job job = jobRepository.findById(id)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "Job not found"));
+                .orElseThrow(() -> new ApiException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "Job not found"));
 
         jobRepository.delete(job);
     }

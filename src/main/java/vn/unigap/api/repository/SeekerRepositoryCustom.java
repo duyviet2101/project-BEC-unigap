@@ -13,34 +13,57 @@ import org.springframework.stereotype.Repository;
 import vn.unigap.api.dto.out.SeekerDtoOut;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class SeekerRepositoryJdbcTemplate {
+public class SeekerRepositoryCustom {
     NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     public Page<SeekerDtoOut> getSeekersWithProvinceNamePaginated(Pageable pageable, Integer provinceId) {
-        String query = "SELECT * FROM seeker A LEFT JOIN job_province B on A.province = B.id" + (provinceId == -1 ? "" : " WHERE A.province = :provinceId") + " ORDER BY :sort LIMIT :limit OFFSET :offset";
-        String sort = String.join(" ", pageable.getSort().toString().split(": "));
+        // Start building the base query
+        StringBuilder queryBuilder = new StringBuilder("SELECT * FROM seeker A LEFT JOIN job_province B ON A.province = B.id");
+        if (provinceId != -1) {
+            queryBuilder.append(" WHERE A.province = :provinceId");
+        }
+
+        // Dynamically build the ORDER BY clause
+        if (pageable.getSort().isSorted()) {
+            String orderBy = pageable.getSort().stream()
+                    .map(order -> "A." + order.getProperty() + " " + order.getDirection())
+                    .collect(Collectors.joining(", "));
+            queryBuilder.append(" ORDER BY ").append(orderBy);
+        } else {
+            // Default sort condition if no sort is specified
+            queryBuilder.append(" ORDER BY A.name ASC");
+        }
+
+        // Append LIMIT and OFFSET for pagination
+        queryBuilder.append(" LIMIT :limit OFFSET :offset");
+
+        // Prepare parameters
         SqlParameterSource sqlParameterSource = new MapSqlParameterSource()
                 .addValue("provinceId", provinceId)
                 .addValue("limit", pageable.getPageSize())
-                .addValue("offset", pageable.getOffset())
-                .addValue("sort", sort);
-        List<SeekerDtoOut> seekers = namedParameterJdbcTemplate.query(query, sqlParameterSource,
-                ((rs, rowNum) -> SeekerDtoOut.builder()
+                .addValue("offset", pageable.getOffset());
+
+        // Execute the query
+        List<SeekerDtoOut> seekers = namedParameterJdbcTemplate.query(queryBuilder.toString(), sqlParameterSource,
+                (rs, rowNum) -> SeekerDtoOut.builder()
                         .id(rs.getInt("id"))
                         .name(rs.getString("A.name"))
                         .birthday(rs.getString("birthday"))
                         .address(rs.getString("address"))
                         .provinceId(rs.getInt("A.province"))
                         .provinceName(rs.getString("B.name"))
-                        .build()));
+                        .build());
 
-        String countQuery = "SELECT COUNT(*) FROM seeker" + (provinceId == -1 ? "" : " WHERE A.province = :provinceId");
+        // Count query to get total number of records
+        String countQuery = "SELECT COUNT(*) FROM seeker A" + (provinceId != -1 ? " WHERE A.province = :provinceId" : "");
         MapSqlParameterSource countParameters = new MapSqlParameterSource().addValue("provinceId", provinceId);
         long total = namedParameterJdbcTemplate.queryForObject(countQuery, countParameters, Long.class);
+
         return new PageImpl<>(seekers, pageable, total);
     }
 }

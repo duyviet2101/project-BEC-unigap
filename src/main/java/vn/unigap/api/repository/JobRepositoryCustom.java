@@ -11,74 +11,58 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 import vn.unigap.api.dto.out.JobDtoOut;
-import vn.unigap.api.dto.out.JobFieldDtoOut;
-import vn.unigap.api.dto.out.JobProvinceDtoOut;
 
 import java.math.BigInteger;
-import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class JobRepositoryJdbcTemplate {
+public class JobRepositoryCustom {
     NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-    List<JobFieldDtoOut> getFieldsNameByIds(String in) {
-        List<Integer> ids = Arrays.stream(in.split("-+"))
-                .filter(s -> !s.isEmpty())
-                .map(Integer::valueOf)
-                .toList();
-
-        String query = "SELECT id, name FROM job_field WHERE id IN (:ids)";
-        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
-                .addValue("ids", ids);
-
-        return namedParameterJdbcTemplate.query(query, mapSqlParameterSource,
-                (rs, rowNum) -> JobFieldDtoOut.builder()
-                        .id(rs.getInt("id"))
-                        .name(rs.getString("name"))
-                        .build());
-
-    }
-
-    List<JobProvinceDtoOut> getProvinceByIds(String in) {
-        List<Integer> ids = Arrays.stream(in.split("-+"))
-                .filter(s -> !s.isEmpty())
-                .map(Integer::valueOf)
-                .toList();
-
-        String query = "SELECT id, name FROM job_province WHERE id IN (:ids)";
-        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
-                .addValue("ids", ids);
-
-        return namedParameterJdbcTemplate.query(query, mapSqlParameterSource,
-                (rs, rowNum) -> JobProvinceDtoOut.builder()
-                        .id(rs.getInt("id"))
-                        .name(rs.getString("name"))
-                        .build());
-    }
+    JobFieldRepositoryCustom jobFieldRepositoryCustom;
+    JobProvinceRepositoryCustom jobProvinceRepositoryCustom;
 
     public Page<JobDtoOut> getJobsWithEmployerNamePaginated(BigInteger employerId, Pageable pageable) {
-        String query = "SELECT * FROM jobs A LEFT JOIN employer B ON A.EMPLOYER_ID = B.ID" + (employerId != null ? " WHERE A.EMPLOYER_ID = :employerId" : "") + " ORDER BY :sort LIMIT :limit OFFSET :offset";
-        String sort = String.join(" ", pageable.getSort().toString().split(": "));
+        // Start building the query
+        StringBuilder queryBuilder = new StringBuilder("SELECT * FROM jobs A LEFT JOIN employer B ON A.EMPLOYER_ID = B.ID");
+        if (employerId != null) {
+            queryBuilder.append(" WHERE A.EMPLOYER_ID = :employerId");
+        }
+
+        // Dynamically build the ORDER BY clause based on Pageable's sort
+        if (pageable.getSort().isSorted()) {
+            String orderBy = pageable.getSort().stream()
+                    .map(order -> order.getProperty() + " " + order.getDirection())
+                    .collect(Collectors.joining(", "));
+            queryBuilder.append(" ORDER BY ").append(orderBy);
+        } else {
+            // Default sort condition if no sort is specified
+            queryBuilder.append(" ORDER BY expired_at DESC, B.name ASC");
+        }
+
+        // Append LIMIT and OFFSET
+        queryBuilder.append(" LIMIT :limit OFFSET :offset");
+
+        // Prepare parameters
         SqlParameterSource namedParameters = new MapSqlParameterSource()
                 .addValue("employerId", employerId)
                 .addValue("limit", pageable.getPageSize())
-                .addValue("offset", pageable.getOffset())
-                .addValue("sort", sort);
-        List<JobDtoOut> jobs = namedParameterJdbcTemplate.query(query, namedParameters, (rs, rowNum) -> JobDtoOut.builder()
+                .addValue("offset", pageable.getOffset());
+
+        // Execute the query
+        List<JobDtoOut> jobs = namedParameterJdbcTemplate.query(queryBuilder.toString(), namedParameters, (rs, rowNum) -> JobDtoOut.builder()
                 .employerName(rs.getString("name"))
                 .title(rs.getString("title"))
                 .quantity(rs.getInt("quantity"))
-                .description(rs.getString("description"))
-                .fields(getFieldsNameByIds(rs.getString("fields")))
-                .provinces(getProvinceByIds(rs.getString("provinces")))
                 .salary(rs.getInt("salary"))
-                .expiredAt(rs.getDate("expired_at"))
+                .expiredAt(rs.getTimestamp("expired_at"))
                 .employerId(rs.getBigDecimal("employer_id").toBigInteger())
                 .id(rs.getBigDecimal("A.id").toBigInteger())
                 .build());
 
+        // Count query remains the same
         String countQuery = "SELECT COUNT(*) FROM jobs" + (employerId != null ? " WHERE EMPLOYER_ID = :employerId" : "");
         SqlParameterSource countParameters = new MapSqlParameterSource().addValue("employerId", employerId);
         long total = namedParameterJdbcTemplate.queryForObject(countQuery, countParameters, Long.class);
@@ -99,8 +83,8 @@ public class JobRepositoryJdbcTemplate {
                 .employerId(rs.getBigDecimal("employer_id").toBigInteger())
                 .id(rs.getBigDecimal("A.id").toBigInteger())
                 .employerName(rs.getString("name"))
-                .fields(getFieldsNameByIds(rs.getString("fields")))
-                .provinces(getProvinceByIds(rs.getString("provinces")))
+                .fields(jobFieldRepositoryCustom.getFieldsNameByIds(rs.getString("fields")))
+                .provinces(jobProvinceRepositoryCustom.getProvinceByIds(rs.getString("provinces")))
                 .build());
 
         return jobList.isEmpty() ? null : jobList.getFirst();
