@@ -6,10 +6,12 @@ import vn.unigap.api.entity.Resume;
 
 import java.math.BigInteger;
 import java.util.Date;
+import java.util.List;
 
 public interface ResumeRepository extends JpaRepository<Resume, BigInteger> {
     Integer countResumesByCreatedAtBetween(Date fromDate, Date toDate);
 
-    @Query("SELECT count(A) from Resume A where DATE(A.createdAt) = DATE(?1) group by DATE(A.createdAt)")
-    Integer countResumesByCreatedAt(Date createdAt);
+    List<Resume> findBySeekerId(BigInteger id);
+
+    List<Resume> findBySalaryLessThanAndFieldsContainsAndProvincesContains(Integer salary, String fields, String provinces);
 }

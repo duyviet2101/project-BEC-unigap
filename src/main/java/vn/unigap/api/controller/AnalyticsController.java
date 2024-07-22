@@ -7,12 +7,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import vn.unigap.api.dto.in.DateRangeDtoIn;
 import vn.unigap.api.service.AnalyticsService;
 import vn.unigap.common.controller.AbstractResponseController;
 
+import java.math.BigInteger;
 import java.util.HashMap;
 
 @RestController
@@ -25,5 +27,10 @@ public class AnalyticsController extends AbstractResponseController {
     @GetMapping(value = "news")
     public ResponseEntity<?> getNews(@Valid DateRangeDtoIn dateRangeDtoIn) {
         return responseEntity(() -> this.analyticsService.getNews(dateRangeDtoIn));
+    }
+
+    @GetMapping(value = "/jobs/{id}/recommendations")
+    public ResponseEntity<?> getRecommendationsForJob(@PathVariable(value = "id") BigInteger id) {
+        return responseEntity(() -> this.analyticsService.getRecommendationsForJob(id));
     }
 }
