@@ -25,6 +25,8 @@ public class JobFieldRepositoryCustom {
                 .map(Integer::valueOf)
                 .toList();
 
+        if (ids.isEmpty()) return null;
+
         String query = "SELECT id, name FROM job_field WHERE id IN (:ids)";
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
                 .addValue("ids", ids);
@@ -42,6 +44,8 @@ public class JobFieldRepositoryCustom {
                 .filter(s -> !s.isEmpty())
                 .map(Integer::valueOf)
                 .toList();
+
+        if (ids.isEmpty()) return false;
 
         return jobFieldRepository.countByIdIn(ids) == ids.size();
     }

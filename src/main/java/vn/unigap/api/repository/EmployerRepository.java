@@ -20,6 +20,5 @@ public interface EmployerRepository extends JpaRepository<Employer, BigInteger> 
 
     Integer countEmployersByCreatedAtBetween(Date fromDate, Date toDate);
 
-    @Query(value = "SELECT DATE(A.created_at) as createdAt, count(*) as count from employer A where DATE(A.created_at) BETWEEN :fromDate AND :toDate group by DATE(A.created_at)", nativeQuery = true)
-    List<Object[]> countEmployersGroupByCreatedAtBetween(Date fromDate, Date toDate);
+    Employer getEmployerById(BigInteger id);
 }

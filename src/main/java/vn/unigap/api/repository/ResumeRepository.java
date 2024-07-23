@@ -12,6 +12,4 @@ public interface ResumeRepository extends JpaRepository<Resume, BigInteger> {
     Integer countResumesByCreatedAtBetween(Date fromDate, Date toDate);
 
     List<Resume> findBySeekerId(BigInteger id);
-
-    List<Resume> findBySalaryLessThanAndFieldsContainsAndProvincesContains(Integer salary, String fields, String provinces);
 }

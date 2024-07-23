@@ -25,6 +25,8 @@ public class JobProvinceRepositoryCustom {
                 .map(Integer::valueOf)
                 .toList();
 
+        if (ids.isEmpty()) return null;
+
         String query = "SELECT id, name FROM job_province WHERE id IN (:ids)";
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
                 .addValue("ids", ids);
@@ -41,6 +43,8 @@ public class JobProvinceRepositoryCustom {
                 .filter(s -> !s.isEmpty())
                 .map(Integer::valueOf)
                 .toList();
+
+        if (ids.isEmpty()) return false;
 
         return jobProvinceRepository.countByIdIn(ids) == ids.size();
     }

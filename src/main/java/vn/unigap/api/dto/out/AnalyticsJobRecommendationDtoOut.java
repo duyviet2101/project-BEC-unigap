@@ -16,8 +16,8 @@ public class AnalyticsJobRecommendationDtoOut {
     BigInteger id;
     String title;
     Integer quantity;
-    JobFieldDtoOut fields;
-    JobProvinceDtoOut provinces;
+    List<JobFieldDtoOut> fields;
+    List<JobProvinceDtoOut> provinces;
     Integer salary;
     Date expiredAt;
     BigInteger employerId;

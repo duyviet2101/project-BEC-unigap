@@ -6,13 +6,20 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 import vn.unigap.api.dto.out.ResumeDtoOut;
+import vn.unigap.api.dto.out.SeekerDtoOut;
+import vn.unigap.api.entity.Resume;
+import vn.unigap.common.errorcode.ErrorCode;
+import vn.unigap.common.exception.ApiException;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,6 +30,44 @@ public class ResumeRepositoryCustom {
     NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     JobFieldRepositoryCustom jobFieldRepositoryCustom;
     JobProvinceRepositoryCustom jobProvinceRepositoryCustom;
+
+    public List<SeekerDtoOut> getRecommendationsForJob(Integer salary, String fields, String provinces) {
+        if (!jobFieldRepositoryCustom.checkAllIdsExist(fields)) fields = "";
+        if (!jobProvinceRepositoryCustom.checkAllIdsExist(provinces)) provinces = "";
+
+        StringBuilder queryBuilder = new StringBuilder("SELECT A.seeker_id, B.name from resume A left join seeker B on A.seeker_id = B.id");
+
+        StringBuilder whereClause = new StringBuilder(" where A.salary <= :salary");
+        if (!fields.isEmpty()) {
+            List<String> fieldsQuery = new ArrayList<>();
+            Arrays.stream(fields.split("-+")).filter(s -> !s.isEmpty()).forEach(id -> {
+                fieldsQuery.add("A.fields LIKE '%-" + id + "-%'");
+            });
+            whereClause.append(" AND (").append(String.join(" OR ", fieldsQuery)).append(")");
+        }
+
+        if (!provinces.isEmpty()) {
+            List<String> provincesQuery = new ArrayList<>();
+            Arrays.stream(provinces.split("-+")).filter(s -> !s.isEmpty()).forEach(id -> {
+                provincesQuery.add("A.provinces LIKE '%-" + id + "-%'");
+            });
+            whereClause.append(" AND (").append(String.join(" OR ", provincesQuery)).append(")");
+        }
+
+        queryBuilder.append(whereClause);
+        queryBuilder.append(" group by A.seeker_id, B.name");
+
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
+                .addValue("salary", salary);
+
+        List<SeekerDtoOut> names = namedParameterJdbcTemplate.query(queryBuilder.toString(), mapSqlParameterSource,
+                (rs, rowNum) -> SeekerDtoOut.builder()
+                        .id(rs.getInt("A.seeker_id"))
+                        .name(rs.getString("B.name"))
+                        .build());
+
+        return names.stream().filter(s -> !(s.getName() == null)).toList();
+    }
 
     public Page<ResumeDtoOut> getResumesWithSeekerNamePaginated(BigInteger seekerId, Pageable pageable) {
         StringBuilder queryBuilder = new StringBuilder("SELECT * FROM resume A LEFT JOIN seeker B ON A.seeker_id = B.id");
