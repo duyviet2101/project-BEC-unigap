@@ -12,8 +12,10 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
+import vn.unigap.api.dto.out.PageDtoOut;
 import vn.unigap.api.dto.out.ResumeDtoOut;
 import vn.unigap.api.dto.out.SeekerDtoOut;
+import vn.unigap.api.entity.Job;
 import vn.unigap.api.entity.Resume;
 import vn.unigap.common.errorcode.ErrorCode;
 import vn.unigap.common.exception.ApiException;
@@ -32,7 +34,6 @@ public class ResumeRepositoryCustom {
     JobFieldRepositoryCustom jobFieldRepositoryCustom;
     JobProvinceRepositoryCustom jobProvinceRepositoryCustom;
 
-    @Cacheable("recommenddationsForJob")
     public List<SeekerDtoOut> getRecommendationsForJob(Integer salary, String fields, String provinces) {
         if (!jobFieldRepositoryCustom.checkAllIdsExist(fields)) fields = "";
         if (!jobProvinceRepositoryCustom.checkAllIdsExist(provinces)) provinces = "";
@@ -42,16 +43,16 @@ public class ResumeRepositoryCustom {
         StringBuilder whereClause = new StringBuilder(" where A.salary <= :salary");
         if (!fields.isEmpty()) {
             List<String> fieldsQuery = new ArrayList<>();
-            Arrays.stream(fields.split("-+")).filter(s -> !s.isEmpty()).forEach(id -> {
-                fieldsQuery.add("A.fields LIKE '%-" + id + "-%'");
+            Arrays.stream(fields.split("-+")).filter(s -> !s.isEmpty()).forEach(fieldId -> {
+                fieldsQuery.add("A.fields LIKE '%-" + fieldId + "-%'");
             });
             whereClause.append(" AND (").append(String.join(" OR ", fieldsQuery)).append(")");
         }
 
         if (!provinces.isEmpty()) {
             List<String> provincesQuery = new ArrayList<>();
-            Arrays.stream(provinces.split("-+")).filter(s -> !s.isEmpty()).forEach(id -> {
-                provincesQuery.add("A.provinces LIKE '%-" + id + "-%'");
+            Arrays.stream(provinces.split("-+")).filter(s -> !s.isEmpty()).forEach(provinceId -> {
+                provincesQuery.add("A.provinces LIKE '%-" + provinceId + "-%'");
             });
             whereClause.append(" AND (").append(String.join(" OR ", provincesQuery)).append(")");
         }
@@ -71,8 +72,8 @@ public class ResumeRepositoryCustom {
         return names.stream().filter(s -> !(s.getName() == null)).toList();
     }
 
-    @Cacheable("resumesList")
-    public Page<ResumeDtoOut> getResumesWithSeekerNamePaginated(BigInteger seekerId, Pageable pageable) {
+    @Cacheable(value = "resumesList", key = "'seekerId=' + #seekerId + ',page=' + #pageable.pageNumber + ',size=' + #pageable.pageSize + ',sort=' + #pageable.sort.toString().replace(': ', '-')")
+    public PageDtoOut<ResumeDtoOut> getResumesWithSeekerNamePaginated(BigInteger seekerId, Pageable pageable) {
         StringBuilder queryBuilder = new StringBuilder("SELECT * FROM resume A LEFT JOIN seeker B ON A.seeker_id = B.id");
 
         String whereClause = "";
@@ -111,6 +112,6 @@ public class ResumeRepositoryCustom {
         SqlParameterSource countParameters = new MapSqlParameterSource().addValue("seekerId", seekerId);
         long total = namedParameterJdbcTemplate.queryForObject(countQuery, countParameters, Long.class);
 
-        return new PageImpl<>(resumes, pageable, total);
+        return PageDtoOut.from(pageable.getPageNumber() + 1, pageable.getPageSize(), total, resumes);
     }
 }

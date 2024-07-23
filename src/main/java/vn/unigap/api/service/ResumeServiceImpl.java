@@ -88,10 +88,12 @@ public class ResumeServiceImpl implements ResumeService {
 //        if (!seekerId.equals(BigInteger.valueOf(-1)) && !seekerRepository.existsSeekerById(seekerId))
 //            throw new ApiException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "Seeker not found!");
 
-        Page<ResumeDtoOut> result = resumeRepositoryCustom.getResumesWithSeekerNamePaginated(seekerId,
+//        Page<ResumeDtoOut> result = resumeRepositoryCustom.getResumesWithSeekerNamePaginated(seekerId,
+//                PageRequest.of(pageDtoIn.getPage() - 1, pageDtoIn.getPageSize(), Sort.by("A.title", "B.name")));
+//
+//        return PageDtoOut.from(pageDtoIn.getPage(), pageDtoIn.getPageSize(), result.getTotalElements(), result.getContent());
+        return resumeRepositoryCustom.getResumesWithSeekerNamePaginated(seekerId,
                 PageRequest.of(pageDtoIn.getPage() - 1, pageDtoIn.getPageSize(), Sort.by("A.title", "B.name")));
-
-        return PageDtoOut.from(pageDtoIn.getPage(), pageDtoIn.getPageSize(), result.getTotalElements(), result.getContent());
     }
 
     @Override

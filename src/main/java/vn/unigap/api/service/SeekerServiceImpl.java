@@ -70,12 +70,17 @@ public class SeekerServiceImpl implements SeekerService {
         if (provinceId != -1 && !jobProvinceRepositoryCustom.existsById(provinceId))
             throw new ApiException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "Province id are invalid!");
 
-        Page<SeekerDtoOut> result = seekerRepositoryCustom.getSeekersWithProvinceNamePaginated(
-                PageRequest.of(pageDtoIn.getPage() - 1, pageDtoIn.getPageSize(), Sort.by("name")),
+//        Page<SeekerDtoOut> result = seekerRepositoryCustom.getSeekersWithProvinceNamePaginated(
+//                PageRequest.of(pageDtoIn.getPage() - 1, pageDtoIn.getPageSize(), Sort.by("name")),
+//                provinceId
+//        );
+//
+//        return PageDtoOut.from(pageDtoIn.getPage(), pageDtoIn.getPageSize(), result.getTotalElements(), result.getContent());
+
+        return seekerRepositoryCustom.getSeekersWithProvinceNamePaginated(
+                PageRequest.of(pageDtoIn.getPage() - 1, pageDtoIn.getPageSize(), Sort.by("name").descending()),
                 provinceId
         );
-
-        return PageDtoOut.from(pageDtoIn.getPage(), pageDtoIn.getPageSize(), result.getTotalElements(), result.getContent());
     }
 
     @Override

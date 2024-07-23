@@ -17,7 +17,7 @@ import java.util.List;
 @Repository
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class AnalyticsServiceRepository {
+public class AnalyticsRepository {
     EmployerRepository employerRepository;
     JobRepository jobRepository;
     SeekerRepository seekerRepository;

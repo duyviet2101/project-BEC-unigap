@@ -5,3 +5,12 @@ spring:
     url: 'jdbc:mysql://localhost:3306/job_db'
     username: root
     password: 21012004VIEt@
+  cache:
+    type: redis
+    redis:
+      time-to-live: PT2M
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password: 21012004Viet

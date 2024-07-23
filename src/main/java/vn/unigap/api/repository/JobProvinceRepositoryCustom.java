@@ -20,7 +20,6 @@ public class JobProvinceRepositoryCustom {
     JobProvinceRepository jobProvinceRepository;
     NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    @Cacheable("provinces")
     public List<JobProvinceDtoOut> getProvinceByIds(String in) {
         List<Integer> ids = Arrays.stream(in.split("-+"))
                 .filter(s -> !s.isEmpty())

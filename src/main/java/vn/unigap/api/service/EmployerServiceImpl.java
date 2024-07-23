@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -18,11 +19,13 @@ import vn.unigap.api.dto.out.PageDtoOut;
 import vn.unigap.api.entity.Employer;
 import vn.unigap.api.mapper.EmployerMapper;
 import vn.unigap.api.repository.EmployerRepository;
+import vn.unigap.api.repository.EmployerRepositoryCustom;
 import vn.unigap.common.errorcode.ErrorCode;
 import vn.unigap.common.exception.ApiException;
 
 import java.math.BigInteger;
 import java.util.Date;
+import java.util.LinkedHashMap;
 
 @Service
 @RequiredArgsConstructor
@@ -31,13 +34,11 @@ public class EmployerServiceImpl implements EmployerService {
     private static final Logger log = LoggerFactory.getLogger(EmployerServiceImpl.class);
     EmployerRepository employerRepository;
     EmployerMapper employerMapper;
+    EmployerRepositoryCustom employerRepositoryCustom;
 
     @Override
     public PageDtoOut<EmployerDtoOut> list(PageDtoIn pageDtoIn) {
-        Page<Employer> employers = this.employerRepository
-                .findAll(PageRequest.of(pageDtoIn.getPage() - 1, pageDtoIn.getPageSize(), Sort.by("id").ascending()));
-        return PageDtoOut.from(pageDtoIn.getPage(), pageDtoIn.getPageSize(), employers.getTotalElements(),
-                employers.stream().map(EmployerDtoOut::from).toList());
+        return employerRepositoryCustom.getEmployersPaginated(PageRequest.of(pageDtoIn.getPage() - 1, pageDtoIn.getPageSize(), Sort.by("id").ascending()));
     }
 
     @Override

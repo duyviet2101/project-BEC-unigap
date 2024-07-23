@@ -12,6 +12,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 import vn.unigap.api.dto.out.JobDtoOut;
+import vn.unigap.api.dto.out.PageDtoOut;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -25,8 +26,8 @@ public class JobRepositoryCustom {
     JobFieldRepositoryCustom jobFieldRepositoryCustom;
     JobProvinceRepositoryCustom jobProvinceRepositoryCustom;
 
-    @Cacheable("jobsList")
-    public Page<JobDtoOut> getJobsWithEmployerNamePaginated(BigInteger employerId, Pageable pageable) {
+    @Cacheable(cacheNames = "jobsList", key = "'page=' + #pageable.pageNumber + ',size=' + #pageable.pageSize + ',sort=' + #pageable.sort.toString().replace(': ', '-')")
+    public PageDtoOut<JobDtoOut> getJobsWithEmployerNamePaginated(BigInteger employerId, Pageable pageable) {
         // Start building the query
         StringBuilder queryBuilder = new StringBuilder("SELECT * FROM jobs A LEFT JOIN employer B ON A.EMPLOYER_ID = B.ID");
         if (employerId != null) {
@@ -69,7 +70,7 @@ public class JobRepositoryCustom {
         SqlParameterSource countParameters = new MapSqlParameterSource().addValue("employerId", employerId);
         long total = namedParameterJdbcTemplate.queryForObject(countQuery, countParameters, Long.class);
 
-        return new PageImpl<>(jobs, pageable, total);
+        return PageDtoOut.from(pageable.getPageNumber() + 1, pageable.getPageSize(), total, jobs);
     }
 
     public JobDtoOut getJobWithEmployerName(BigInteger id) {

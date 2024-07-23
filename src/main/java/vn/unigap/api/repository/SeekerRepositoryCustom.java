@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
+import vn.unigap.api.dto.out.PageDtoOut;
 import vn.unigap.api.dto.out.SeekerDtoOut;
 
 import java.util.List;
@@ -22,8 +23,8 @@ import java.util.stream.Collectors;
 public class SeekerRepositoryCustom {
     NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    @Cacheable("seekersList")
-    public Page<SeekerDtoOut> getSeekersWithProvinceNamePaginated(Pageable pageable, Integer provinceId) {
+    @Cacheable(value = "seekersList", key = "'page=' + #pageable.pageNumber + ',size=' + #pageable.pageSize + ',sort=' + #pageable.sort.toString().replace(': ', '-')")
+    public PageDtoOut<SeekerDtoOut> getSeekersWithProvinceNamePaginated(Pageable pageable, Integer provinceId) {
         // Start building the base query
         StringBuilder queryBuilder = new StringBuilder("SELECT * FROM seeker A LEFT JOIN job_province B ON A.province = B.id");
         if (provinceId != -1) {
@@ -66,6 +67,6 @@ public class SeekerRepositoryCustom {
         MapSqlParameterSource countParameters = new MapSqlParameterSource().addValue("provinceId", provinceId);
         long total = namedParameterJdbcTemplate.queryForObject(countQuery, countParameters, Long.class);
 
-        return new PageImpl<>(seekers, pageable, total);
+        return PageDtoOut.from(pageable.getPageNumber(), pageable.getPageSize(), total, seekers);
     }
 }

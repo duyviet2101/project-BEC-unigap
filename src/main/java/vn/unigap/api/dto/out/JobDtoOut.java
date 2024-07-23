@@ -8,6 +8,7 @@ import lombok.experimental.FieldDefaults;
 import vn.unigap.api.entity.Job;
 import vn.unigap.api.service.EmployerService;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
@@ -18,7 +19,7 @@ import java.util.List;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class JobDtoOut {
+public class JobDtoOut implements Serializable {
 
     BigInteger id;
     String title;

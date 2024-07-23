@@ -79,10 +79,13 @@ public class JobServiceImpl implements JobService {
     @Override
     public PageDtoOut<JobDtoOut> list(PageDtoIn pageDtoIn, BigInteger employerId) {
         //NamedParameterJdbcTemplate
-        Page<JobDtoOut> result = jobRepositoryCustom.getJobsWithEmployerNamePaginated(employerId,
-                PageRequest.of(pageDtoIn.getPage() - 1, pageDtoIn.getPageSize(), Sort.by(Sort.Order.desc("expired_at"), Sort.Order.asc("name"))));
+//        Page<JobDtoOut> result = jobRepositoryCustom.getJobsWithEmployerNamePaginated(employerId,
+//                PageRequest.of(pageDtoIn.getPage() - 1, pageDtoIn.getPageSize(), Sort.by(Sort.Order.desc("expired_at"), Sort.Order.asc("name"))));
+//
+//        return PageDtoOut.from(pageDtoIn.getPage(), pageDtoIn.getPageSize(), result.getTotalElements(), result.getContent());
 
-        return PageDtoOut.from(pageDtoIn.getPage(), pageDtoIn.getPageSize(), result.getTotalElements(), result.getContent());
+        return jobRepositoryCustom.getJobsWithEmployerNamePaginated(employerId,
+                PageRequest.of(pageDtoIn.getPage() - 1, pageDtoIn.getPageSize(), Sort.by(Sort.Order.desc("expired_at"), Sort.Order.asc("name"))));
     }
 
     @Override
