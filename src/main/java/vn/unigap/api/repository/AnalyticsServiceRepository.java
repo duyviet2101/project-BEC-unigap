@@ -3,6 +3,7 @@ package vn.unigap.api.repository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -82,6 +83,7 @@ public class AnalyticsServiceRepository {
                 .build());
     }
 
+    @Cacheable("news")
     public AnalyticsNewsDtoOut getNewsByDateRange(String fromDate, String toDate) {
         Date fromDateConverted = Helper.convertStringToDate(fromDate);
         Date toDateConverted = Helper.convertStringToDate(toDate);

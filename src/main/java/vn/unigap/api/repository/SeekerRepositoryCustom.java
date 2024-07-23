@@ -3,6 +3,7 @@ package vn.unigap.api.repository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 public class SeekerRepositoryCustom {
     NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
+    @Cacheable("seekersList")
     public Page<SeekerDtoOut> getSeekersWithProvinceNamePaginated(Pageable pageable, Integer provinceId) {
         // Start building the base query
         StringBuilder queryBuilder = new StringBuilder("SELECT * FROM seeker A LEFT JOIN job_province B ON A.province = B.id");

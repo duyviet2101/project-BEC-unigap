@@ -3,6 +3,7 @@ package vn.unigap.api.repository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -31,6 +32,7 @@ public class ResumeRepositoryCustom {
     JobFieldRepositoryCustom jobFieldRepositoryCustom;
     JobProvinceRepositoryCustom jobProvinceRepositoryCustom;
 
+    @Cacheable("recommenddationsForJob")
     public List<SeekerDtoOut> getRecommendationsForJob(Integer salary, String fields, String provinces) {
         if (!jobFieldRepositoryCustom.checkAllIdsExist(fields)) fields = "";
         if (!jobProvinceRepositoryCustom.checkAllIdsExist(provinces)) provinces = "";
@@ -69,6 +71,7 @@ public class ResumeRepositoryCustom {
         return names.stream().filter(s -> !(s.getName() == null)).toList();
     }
 
+    @Cacheable("resumesList")
     public Page<ResumeDtoOut> getResumesWithSeekerNamePaginated(BigInteger seekerId, Pageable pageable) {
         StringBuilder queryBuilder = new StringBuilder("SELECT * FROM resume A LEFT JOIN seeker B ON A.seeker_id = B.id");
 

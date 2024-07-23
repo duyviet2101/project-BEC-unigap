@@ -3,6 +3,7 @@ package vn.unigap.api.repository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +25,7 @@ public class JobRepositoryCustom {
     JobFieldRepositoryCustom jobFieldRepositoryCustom;
     JobProvinceRepositoryCustom jobProvinceRepositoryCustom;
 
+    @Cacheable("jobsList")
     public Page<JobDtoOut> getJobsWithEmployerNamePaginated(BigInteger employerId, Pageable pageable) {
         // Start building the query
         StringBuilder queryBuilder = new StringBuilder("SELECT * FROM jobs A LEFT JOIN employer B ON A.EMPLOYER_ID = B.ID");
