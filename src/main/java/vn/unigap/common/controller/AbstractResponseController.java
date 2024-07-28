@@ -4,7 +4,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import vn.unigap.common.response.ApiResponse;
 
+import java.util.logging.Logger;
+
 public class AbstractResponseController {
+
     public <T> ResponseEntity<ApiResponse<T>> responseEntity(CallbackFunction<T> callback) {
         return responseEntity(callback, HttpStatus.OK);
     }
