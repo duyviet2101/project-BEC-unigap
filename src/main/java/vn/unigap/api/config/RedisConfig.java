@@ -2,9 +2,9 @@ package vn.unigap.api.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -16,6 +16,9 @@ import java.time.Duration;
 
 @Configuration
 public class RedisConfig {
+
+    @Autowired
+    CacheNames cacheNames;
 
     @Bean
     public GenericJackson2JsonRedisSerializer genericJackson2JsonRedisSerializer() {
@@ -34,11 +37,20 @@ public class RedisConfig {
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()));
 //                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(genericJackson2JsonRedisSerializer()));
 
-        return RedisCacheManager.builder(connectionFactory)
-                .cacheDefaults(configurationDefault)
-                .withCacheConfiguration("employersList", configurationDefault.entryTtl(Duration.ofMinutes(5)))
-                .withCacheConfiguration("jobsList", configurationDefault.entryTtl(Duration.ofMinutes(5)))
-                .build();
+//        return RedisCacheManager.builder(connectionFactory)
+//                .cacheDefaults(configurationDefault)
+//                .withCacheConfiguration("employersList", configurationDefault.entryTtl(Duration.ofMinutes(5)))
+//                .withCacheConfiguration("jobsList", configurationDefault.entryTtl(Duration.ofMinutes(5)))
+//                .build();
+
+        RedisCacheManager.RedisCacheManagerBuilder builder = RedisCacheManager.builder(connectionFactory)
+                .cacheDefaults(configurationDefault);
+
+        cacheNames.getCacheNames().forEach(cacheName -> {
+            builder.withCacheConfiguration(cacheName.getName(), configurationDefault.entryTtl(Duration.ofMinutes(cacheName.getTtl())));
+        });
+
+        return builder.build();
     }
 
 }
