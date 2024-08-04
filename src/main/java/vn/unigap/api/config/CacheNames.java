@@ -10,5 +10,12 @@ import java.util.List;
 @Component
 @ConfigurationProperties(prefix = "redis")
 public class CacheNames {
+
+    @Data
+    public static class CacheName {
+        private String name;
+        private int ttl;
+    }
+
     List<CacheName> cacheNames;
 }
