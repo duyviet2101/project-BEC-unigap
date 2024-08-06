@@ -25,8 +25,7 @@ public class EmployerRepositoryCustom {
         StringBuilder queryBuilder = new StringBuilder("SELECT * FROM employer");
 
         if (pageable.getSort().isSorted()) {
-            String orderBy = pageable.getSort().stream()
-                    .map(order -> order.getProperty() + " " + order.getDirection())
+            String orderBy = pageable.getSort().stream().map(order -> order.getProperty() + " " + order.getDirection())
                     .collect(Collectors.joining(", "));
             queryBuilder.append(" ORDER BY ").append(orderBy);
         } else {
@@ -36,20 +35,17 @@ public class EmployerRepositoryCustom {
         queryBuilder.append(" LIMIT :limit OFFSET :offset");
 
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
-                .addValue("limit", pageable.getPageSize())
-                .addValue("offset", pageable.getOffset());
+                .addValue("limit", pageable.getPageSize()).addValue("offset", pageable.getOffset());
 
-        List<EmployerDtoOut> employers = namedParameterJdbcTemplate.query(queryBuilder.toString(), mapSqlParameterSource, (rs, rowNum) -> EmployerDtoOut.builder()
-                .id(rs.getBigDecimal("id").toBigInteger())
-                .email(rs.getString("email"))
-                .name(rs.getString("name"))
-                .province(rs.getInt("province"))
-                .description(rs.getString("description"))
-                .createdAt(rs.getTimestamp("created_at"))
-                .updatedAt(rs.getTimestamp("updated_at"))
-                .build());
+        List<EmployerDtoOut> employers = namedParameterJdbcTemplate.query(queryBuilder.toString(),
+                mapSqlParameterSource,
+                (rs, rowNum) -> EmployerDtoOut.builder().id(rs.getBigDecimal("id").toBigInteger())
+                        .email(rs.getString("email")).name(rs.getString("name")).province(rs.getInt("province"))
+                        .description(rs.getString("description")).createdAt(rs.getTimestamp("created_at"))
+                        .updatedAt(rs.getTimestamp("updated_at")).build());
 
-        Long totalElements = namedParameterJdbcTemplate.queryForObject("SELECT COUNT(*) FROM employer", new MapSqlParameterSource(), Long.class);
+        Long totalElements = namedParameterJdbcTemplate.queryForObject("SELECT COUNT(*) FROM employer",
+                new MapSqlParameterSource(), Long.class);
 
         return PageDtoOut.from(pageable.getPageNumber(), pageable.getPageSize(), totalElements, employers);
     }

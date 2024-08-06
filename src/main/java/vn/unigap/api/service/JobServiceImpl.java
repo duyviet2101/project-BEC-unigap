@@ -3,7 +3,6 @@ package vn.unigap.api.service;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -42,16 +41,10 @@ public class JobServiceImpl implements JobService {
         if (!jobProvinceRepositoryCustom.checkAllIdsExist(jobDtoIn.getProvinceIds()))
             throw new ApiException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "Province ids are invalid!");
 
-        jobRepository.save(Job.builder()
-                        .title(jobDtoIn.getTitle())
-                        .employerId(jobDtoIn.getEmployerId())
-                        .quantity(jobDtoIn.getQuantity())
-                        .description(jobDtoIn.getDescription())
-                        .fields(jobDtoIn.getFieldIds())
-                        .provinces(jobDtoIn.getProvinceIds())
-                        .salary(jobDtoIn.getSalary())
-                        .expiredAt(jobDtoIn.getExpiredAt())
-                    .build());
+        jobRepository.save(Job.builder().title(jobDtoIn.getTitle()).employerId(jobDtoIn.getEmployerId())
+                .quantity(jobDtoIn.getQuantity()).description(jobDtoIn.getDescription()).fields(jobDtoIn.getFieldIds())
+                .provinces(jobDtoIn.getProvinceIds()).salary(jobDtoIn.getSalary()).expiredAt(jobDtoIn.getExpiredAt())
+                .build());
     }
 
     @Override
@@ -78,14 +71,14 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public PageDtoOut<JobDtoOut> list(PageDtoIn pageDtoIn, BigInteger employerId) {
-        //NamedParameterJdbcTemplate
+        // NamedParameterJdbcTemplate
 //        Page<JobDtoOut> result = jobRepositoryCustom.getJobsWithEmployerNamePaginated(employerId,
 //                PageRequest.of(pageDtoIn.getPage() - 1, pageDtoIn.getPageSize(), Sort.by(Sort.Order.desc("expired_at"), Sort.Order.asc("name"))));
 //
 //        return PageDtoOut.from(pageDtoIn.getPage(), pageDtoIn.getPageSize(), result.getTotalElements(), result.getContent());
 
-        return jobRepositoryCustom.getJobsWithEmployerNamePaginated(employerId,
-                PageRequest.of(pageDtoIn.getPage() - 1, pageDtoIn.getPageSize(), Sort.by(Sort.Order.desc("expired_at"), Sort.Order.asc("name"))));
+        return jobRepositoryCustom.getJobsWithEmployerNamePaginated(employerId, PageRequest.of(pageDtoIn.getPage() - 1,
+                pageDtoIn.getPageSize(), Sort.by(Sort.Order.desc("expired_at"), Sort.Order.asc("name"))));
     }
 
     @Override

@@ -19,26 +19,16 @@ public class ApiResponse<T> {
     T object;
 
     public static <T> ApiResponse<T> success(T object) {
-        return ApiResponse.<T>builder()
-                .errorCode(ErrorCode.SUCCESS)
-                .statusCode(HttpStatus.OK.value())
-                .object(object)
+        return ApiResponse.<T>builder().errorCode(ErrorCode.SUCCESS).statusCode(HttpStatus.OK.value()).object(object)
                 .build();
     }
 
     public static <T> ApiResponse<T> success(T object, HttpStatus httpStatus) {
-        return ApiResponse.<T>builder()
-                .errorCode(ErrorCode.SUCCESS)
-                .statusCode(httpStatus.value())
-                .object(object)
+        return ApiResponse.<T>builder().errorCode(ErrorCode.SUCCESS).statusCode(httpStatus.value()).object(object)
                 .build();
     }
 
     public static <T> ApiResponse<T> error(Integer errorCode, HttpStatus httpStatus, String message) {
-        return ApiResponse.<T>builder()
-                .errorCode(errorCode)
-                .statusCode(httpStatus.value())
-                .message(message)
-                .build();
+        return ApiResponse.<T>builder().errorCode(errorCode).statusCode(httpStatus.value()).message(message).build();
     }
 }

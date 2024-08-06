@@ -24,14 +24,8 @@ public class EmployerDtoOut {
     Date updatedAt;
 
     public static EmployerDtoOut from(Employer employer) {
-        return EmployerDtoOut.builder()
-                .id(employer.getId())
-                .email(employer.getEmail())
-                .name(employer.getName())
-                .province(employer.getProvince())
-                .description(employer.getDescription())
-                .createdAt(employer.getCreatedAt())
-                .updatedAt(employer.getUpdatedAt())
-                .build();
+        return EmployerDtoOut.builder().id(employer.getId()).email(employer.getEmail()).name(employer.getName())
+                .province(employer.getProvince()).description(employer.getDescription())
+                .createdAt(employer.getCreatedAt()).updatedAt(employer.getUpdatedAt()).build();
     }
 }

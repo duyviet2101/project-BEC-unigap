@@ -3,7 +3,6 @@ package vn.unigap.api.dto.out;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;

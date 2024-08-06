@@ -1,7 +1,6 @@
 package vn.unigap.api.service;
 
 import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -38,16 +37,14 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public AuthLoginDtoOut login(AuthLoginDtoIn authLoginDtoIn) {
         User user = userRepository.findUserByUsername(authLoginDtoIn.getUsername())
-            .orElseThrow(() -> new ApiException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "User not found!"));
+                .orElseThrow(() -> new ApiException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "User not found!"));
 
         boolean isAuthenticated = passwordEncoder.matches(authLoginDtoIn.getPassword(), user.getPassword());
 
         if (!isAuthenticated)
             throw new ApiException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "Password or username is invalid!");
 
-        return AuthLoginDtoOut.builder()
-                .accessToken(grantAccessToken(grantAccessToken(user.getUsername())))
-                .build();
+        return AuthLoginDtoOut.builder().accessToken(grantAccessToken(grantAccessToken(user.getUsername()))).build();
     }
 
     @Override
@@ -55,17 +52,13 @@ public class AuthServiceImpl implements AuthService {
         if (userRepository.existsUserByUsername(authLoginDtoIn.getUsername()))
             throw new ApiException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "User existed!");
 
-        User user = User.builder()
-                .username(authLoginDtoIn.getUsername())
-                .password(authLoginDtoIn.getPassword())
+        User user = User.builder().username(authLoginDtoIn.getUsername()).password(authLoginDtoIn.getPassword())
                 .build();
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
 
-        return AuthRegisterDtoOut.builder()
-                .username(user.getUsername())
-                .build();
+        return AuthRegisterDtoOut.builder().username(user.getUsername()).build();
     }
 
     private String grantAccessToken(String username) {
@@ -73,12 +66,12 @@ public class AuthServiceImpl implements AuthService {
         long exp = iat + Duration.ofHours(8).toSeconds();
 
         JwtEncoderParameters parameters = JwtEncoderParameters
-                //header
+                // header
                 .from(JwsHeader.with(SignatureAlgorithm.RS256).build(),
-                //payload
-                JwtClaimsSet.builder().subject(username).issuedAt(Instant.ofEpochSecond(iat))
-                        .expiresAt(Instant.ofEpochSecond(exp)).claim("user_name", username)
-                        .claim("scope", List.of("ADMIN")).build());
+                        // payload
+                        JwtClaimsSet.builder().subject(username).issuedAt(Instant.ofEpochSecond(iat))
+                                .expiresAt(Instant.ofEpochSecond(exp)).claim("user_name", username)
+                                .claim("scope", List.of("ADMIN")).build());
         try {
             return jwtEncoder.encode(parameters).getTokenValue();
         } catch (JwtEncodingException e) {

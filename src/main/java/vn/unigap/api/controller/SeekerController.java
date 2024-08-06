@@ -1,6 +1,5 @@
 package vn.unigap.api.controller;
 
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -29,8 +28,7 @@ public class SeekerController extends AbstractResponseController {
     SeekerService seekerService;
 
     @Operation(summary = "Thêm mới người tìm việc", responses = {
-            @ApiResponse(responseCode = "201", content = @Content(schema = @Schema(implementation = HashMap.class)))
-    })
+            @ApiResponse(responseCode = "201", content = @Content(schema = @Schema(implementation = HashMap.class))) })
     @PostMapping(value = "")
     public ResponseEntity<?> create(@RequestBody @Valid SeekerDtoIn seekerDtoIn) {
         return responseEntity(() -> {
@@ -40,35 +38,33 @@ public class SeekerController extends AbstractResponseController {
     }
 
     @Operation(summary = "Cập nhật người tìm việc", responses = {
-            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = HashMap.class)))
-    })
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = HashMap.class))) })
     @PatchMapping(value = "/{id}")
-    public ResponseEntity<?> update(@PathVariable(value = "id") BigInteger id, @RequestBody @Valid SeekerDtoIn seekerDtoIn) {
+    public ResponseEntity<?> update(@PathVariable(value = "id") BigInteger id,
+            @RequestBody @Valid SeekerDtoIn seekerDtoIn) {
         return responseEntity(() -> {
-           this.seekerService.update(id, seekerDtoIn);
-           return new HashMap<>();
+            this.seekerService.update(id, seekerDtoIn);
+            return new HashMap<>();
         });
     }
 
     @Operation(summary = "Lấy danh sách người tìm việc", responses = {
-            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = ResponsePageSeeker.class)))
-    })
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = ResponsePageSeeker.class))) })
     @GetMapping(value = "")
-    public ResponseEntity<?> list(@Valid PageDtoIn pageDtoIn, @RequestParam(value = "provinceId", defaultValue = "-1") Integer provinceId) {
+    public ResponseEntity<?> list(@Valid PageDtoIn pageDtoIn,
+            @RequestParam(value = "provinceId", defaultValue = "-1") Integer provinceId) {
         return responseEntity(() -> this.seekerService.list(pageDtoIn, provinceId));
     }
 
     @Operation(summary = "Lấy thông tin người tìm việc theo id", responses = {
-            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = SeekerDtoOut.class)))
-    })
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = SeekerDtoOut.class))) })
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> get(@PathVariable(value = "id") BigInteger id) {
         return responseEntity(() -> this.seekerService.get(id));
     }
 
     @Operation(summary = "Xóa người tìm việc", responses = {
-            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = HashMap.class)))
-    })
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = HashMap.class))) })
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> delete(@PathVariable(value = "id") BigInteger id) {
         return responseEntity(() -> {
@@ -77,6 +73,6 @@ public class SeekerController extends AbstractResponseController {
         });
     }
 
-    static class ResponsePageSeeker extends vn.unigap.common.response.ApiResponse<PageDtoOut<SeekerDtoOut>>{
+    static class ResponsePageSeeker extends vn.unigap.common.response.ApiResponse<PageDtoOut<SeekerDtoOut>> {
     }
 }

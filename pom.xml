@@ -31,6 +31,7 @@
 		<projectlombok-lombok.version>1.18.30</projectlombok-lombok.version>
 		<mapstruct.version>1.5.5.Final</mapstruct.version>
 		<lombok-mapstruct-binding.version>0.1.0</lombok-mapstruct-binding.version>
+		<spotless.version>2.43.0</spotless.version>
 	</properties>
 	<dependencies>
 <!--		<dependency>-->
@@ -131,6 +132,33 @@
 						</exclude>
 					</excludes>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.diffplug.spotless</groupId>
+				<artifactId>spotless-maven-plugin</artifactId>
+				<version>${spotless.version}</version>
+				<configuration>
+					<java>
+						<toggleOffOn>
+							<off>formatter:off</off>
+							<on>formatter:on</on>
+						</toggleOffOn>
+						<eclipse>
+							<file>eclipse-java-formatter.xml</file>
+							<version>4.26</version>
+						</eclipse>
+						<removeUnusedImports/>
+					</java>
+				</configuration>
+				<executions>
+					<execution>
+						<id>spotless-check</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 <!--			<plugin>-->
 <!--				<groupId>org.apache.maven.plugins</groupId>-->

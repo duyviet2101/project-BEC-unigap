@@ -7,7 +7,6 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import vn.unigap.api.dto.out.JobFieldDtoOut;
-import vn.unigap.api.dto.out.JobProvinceDtoOut;
 
 import java.util.Arrays;
 import java.util.List;
@@ -20,32 +19,24 @@ public class JobFieldRepositoryCustom {
     JobFieldRepository jobFieldRepository;
 
     public List<JobFieldDtoOut> getFieldsNameByIds(String in) {
-        List<Integer> ids = Arrays.stream(in.split("-+"))
-                .filter(s -> !s.isEmpty())
-                .map(Integer::valueOf)
-                .toList();
+        List<Integer> ids = Arrays.stream(in.split("-+")).filter(s -> !s.isEmpty()).map(Integer::valueOf).toList();
 
-        if (ids.isEmpty()) return null;
+        if (ids.isEmpty())
+            return null;
 
         String query = "SELECT id, name FROM job_field WHERE id IN (:ids)";
-        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
-                .addValue("ids", ids);
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource().addValue("ids", ids);
 
         return namedParameterJdbcTemplate.query(query, mapSqlParameterSource,
-                (rs, rowNum) -> JobFieldDtoOut.builder()
-                        .id(rs.getInt("id"))
-                        .name(rs.getString("name"))
-                        .build());
+                (rs, rowNum) -> JobFieldDtoOut.builder().id(rs.getInt("id")).name(rs.getString("name")).build());
 
     }
 
     public boolean checkAllIdsExist(String in) {
-        List<Integer> ids = Arrays.stream(in.split("-+"))
-                .filter(s -> !s.isEmpty())
-                .map(Integer::valueOf)
-                .toList();
+        List<Integer> ids = Arrays.stream(in.split("-+")).filter(s -> !s.isEmpty()).map(Integer::valueOf).toList();
 
-        if (ids.isEmpty()) return false;
+        if (ids.isEmpty())
+            return false;
 
         return jobFieldRepository.countByIdIn(ids) == ids.size();
     }

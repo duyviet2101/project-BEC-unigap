@@ -18,7 +18,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import vn.unigap.api.dto.in.EmployerDtoIn;
 import vn.unigap.api.dto.out.EmployerDtoOut;
@@ -47,22 +46,11 @@ public class EmployerControllerTest {
     @BeforeEach
     void initData() {
 
-        employerDtoIn = EmployerDtoIn.builder()
-                .email("aaa@a.a")
-                .name("Viettt")
-                .province(1111)
-                .description("AAAA")
+        employerDtoIn = EmployerDtoIn.builder().email("aaa@a.a").name("Viettt").province(1111).description("AAAA")
                 .build();
 
-        employerDtoOut = EmployerDtoOut.builder()
-                .id(BigInteger.valueOf(11111))
-                .email("aaa@a.a")
-                .name("Viettt")
-                .province(1111)
-                .description("AAAA")
-                .createdAt(new Date())
-                .updatedAt(new Date())
-                .build();
+        employerDtoOut = EmployerDtoOut.builder().id(BigInteger.valueOf(11111)).email("aaa@a.a").name("Viettt")
+                .province(1111).description("AAAA").createdAt(new Date()).updatedAt(new Date()).build();
 
     }
 
@@ -73,12 +61,11 @@ public class EmployerControllerTest {
         String content = objectMapper.writeValueAsString(employerDtoIn);
         Mockito.doNothing().when(employerService).create(ArgumentMatchers.any(EmployerDtoIn.class));
 
-
         // WHEN,THEN
-        mockMvc.perform(MockMvcRequestBuilders.post("/employers").contentType(MediaType.APPLICATION_JSON_VALUE).content(content))
+        mockMvc.perform(MockMvcRequestBuilders.post("/employers").contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(content))
 //                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isCreated())
-                .andExpect(result -> {
+                .andExpect(MockMvcResultMatchers.status().isCreated()).andExpect(result -> {
                     var response = objectMapper.readValue(result.getResponse().getContentAsString(),
                             new TypeReference<ApiResponse<EmployerDtoOut>>() {
                             });

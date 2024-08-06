@@ -3,7 +3,6 @@ package vn.unigap.api.repository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -21,31 +20,23 @@ public class JobProvinceRepositoryCustom {
     NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     public List<JobProvinceDtoOut> getProvinceByIds(String in) {
-        List<Integer> ids = Arrays.stream(in.split("-+"))
-                .filter(s -> !s.isEmpty())
-                .map(Integer::valueOf)
-                .toList();
+        List<Integer> ids = Arrays.stream(in.split("-+")).filter(s -> !s.isEmpty()).map(Integer::valueOf).toList();
 
-        if (ids.isEmpty()) return null;
+        if (ids.isEmpty())
+            return null;
 
         String query = "SELECT id, name FROM job_province WHERE id IN (:ids)";
-        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
-                .addValue("ids", ids);
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource().addValue("ids", ids);
 
         return namedParameterJdbcTemplate.query(query, mapSqlParameterSource,
-                (rs, rowNum) -> JobProvinceDtoOut.builder()
-                        .id(rs.getInt("id"))
-                        .name(rs.getString("name"))
-                        .build());
+                (rs, rowNum) -> JobProvinceDtoOut.builder().id(rs.getInt("id")).name(rs.getString("name")).build());
     }
 
     public boolean checkAllIdsExist(String in) {
-        List<Integer> ids = Arrays.stream(in.split("-+"))
-                .filter(s -> !s.isEmpty())
-                .map(Integer::valueOf)
-                .toList();
+        List<Integer> ids = Arrays.stream(in.split("-+")).filter(s -> !s.isEmpty()).map(Integer::valueOf).toList();
 
-        if (ids.isEmpty()) return false;
+        if (ids.isEmpty())
+            return false;
 
         return jobProvinceRepository.countByIdIn(ids) == ids.size();
     }
@@ -56,7 +47,8 @@ public class JobProvinceRepositoryCustom {
 
     public String getProvinceName(Integer id) {
         JobProvince jobProvince = jobProvinceRepository.getJobProvinceById(id);
-        if (jobProvince == null) return null;
+        if (jobProvince == null)
+            return null;
         return jobProvince.getName();
     }
 }

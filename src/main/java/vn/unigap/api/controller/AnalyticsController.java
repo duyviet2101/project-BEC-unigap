@@ -7,7 +7,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +21,6 @@ import vn.unigap.api.service.AnalyticsService;
 import vn.unigap.common.controller.AbstractResponseController;
 
 import java.math.BigInteger;
-import java.util.HashMap;
 
 @RestController
 @RequiredArgsConstructor

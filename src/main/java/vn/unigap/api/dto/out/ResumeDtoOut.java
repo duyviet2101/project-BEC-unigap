@@ -1,6 +1,5 @@
 package vn.unigap.api.dto.out;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 

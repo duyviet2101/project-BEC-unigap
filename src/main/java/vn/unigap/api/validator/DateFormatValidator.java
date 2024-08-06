@@ -4,9 +4,7 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 
 public class DateFormatValidator implements ConstraintValidator<DateFormat, String> {
     String pattern = "yyyy-MM-dd";
@@ -19,12 +17,13 @@ public class DateFormatValidator implements ConstraintValidator<DateFormat, Stri
 
     @Override
     public boolean isValid(String s, ConstraintValidatorContext constraintValidatorContext) {
-        if (s == null) return true;
+        if (s == null)
+            return true;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(this.pattern);
         try {
             LocalDate.parse(s, formatter);
             return true;
-        } catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }

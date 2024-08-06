@@ -3,7 +3,6 @@ package vn.unigap.api.service;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -36,12 +35,8 @@ public class SeekerServiceImpl implements SeekerService {
         if (!jobProvinceRepositoryCustom.existsById(seekerDtoIn.getProvinceId()))
             throw new ApiException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "Field ids are invalid!");
 
-        seekerRepository.save(Seeker.builder()
-                        .name(seekerDtoIn.getName())
-                        .birthday(seekerDtoIn.getBirthday())
-                        .address(seekerDtoIn.getAddress())
-                        .province(seekerDtoIn.getProvinceId())
-                        .build());
+        seekerRepository.save(Seeker.builder().name(seekerDtoIn.getName()).birthday(seekerDtoIn.getBirthday())
+                .address(seekerDtoIn.getAddress()).province(seekerDtoIn.getProvinceId()).build());
     }
 
     @Override
@@ -49,8 +44,8 @@ public class SeekerServiceImpl implements SeekerService {
         if (!jobProvinceRepositoryCustom.existsById(seekerDtoIn.getProvinceId()))
             throw new ApiException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "Province id are invalid!");
 
-        Seeker seeker = seekerRepository.findById(id)
-                .orElseThrow(() -> new ApiException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "Seeker not found!"));
+        Seeker seeker = seekerRepository.findById(id).orElseThrow(
+                () -> new ApiException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "Seeker not found!"));
 
         seekerMapper.updateSeeker(seeker, seekerDtoIn);
 
@@ -59,8 +54,8 @@ public class SeekerServiceImpl implements SeekerService {
 
     @Override
     public SeekerDtoOut get(BigInteger id) {
-        Seeker seeker = seekerRepository.findById(id)
-                .orElseThrow(() -> new ApiException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "Seeker not found!"));
+        Seeker seeker = seekerRepository.findById(id).orElseThrow(
+                () -> new ApiException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "Seeker not found!"));
 
         return seekerMapper.toSeekerDtoOut(seeker, jobProvinceRepositoryCustom.getProvinceName(seeker.getProvince()));
     }
@@ -79,14 +74,13 @@ public class SeekerServiceImpl implements SeekerService {
 
         return seekerRepositoryCustom.getSeekersWithProvinceNamePaginated(
                 PageRequest.of(pageDtoIn.getPage() - 1, pageDtoIn.getPageSize(), Sort.by("name").descending()),
-                provinceId
-        );
+                provinceId);
     }
 
     @Override
     public void delete(BigInteger id) {
-        Seeker seeker = seekerRepository.findById(id)
-                .orElseThrow(() -> new ApiException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "Seeker not found!"));
+        Seeker seeker = seekerRepository.findById(id).orElseThrow(
+                () -> new ApiException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "Seeker not found!"));
         seekerRepository.delete(seeker);
     }
 }

@@ -5,8 +5,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -25,7 +23,6 @@ import vn.unigap.common.exception.ApiException;
 
 import java.math.BigInteger;
 import java.util.Date;
-import java.util.LinkedHashMap;
 
 @Service
 @RequiredArgsConstructor
@@ -38,7 +35,8 @@ public class EmployerServiceImpl implements EmployerService {
 
     @Override
     public PageDtoOut<EmployerDtoOut> list(PageDtoIn pageDtoIn) {
-        return employerRepositoryCustom.getEmployersPaginated(PageRequest.of(pageDtoIn.getPage() - 1, pageDtoIn.getPageSize(), Sort.by("id").ascending()));
+        return employerRepositoryCustom.getEmployersPaginated(
+                PageRequest.of(pageDtoIn.getPage() - 1, pageDtoIn.getPageSize(), Sort.by("id").ascending()));
     }
 
     @Override
@@ -47,12 +45,8 @@ public class EmployerServiceImpl implements EmployerService {
             throw new ApiException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "Email already existed!");
         });
 
-        employerRepository.save(Employer.builder()
-            .email(employerDtoIn.getEmail())
-            .name(employerDtoIn.getName())
-            .province(employerDtoIn.getProvince())
-            .description(employerDtoIn.getDescription())
-            .build());
+        employerRepository.save(Employer.builder().email(employerDtoIn.getEmail()).name(employerDtoIn.getName())
+                .province(employerDtoIn.getProvince()).description(employerDtoIn.getDescription()).build());
     }
 
     @Override

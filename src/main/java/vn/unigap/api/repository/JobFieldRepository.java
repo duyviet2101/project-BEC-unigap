@@ -9,5 +9,6 @@ import java.util.List;
 @Repository
 public interface JobFieldRepository extends JpaRepository<JobField, Integer> {
     Integer countByIdIn(List<Integer> ids);
+
     boolean existsById(Integer id);
 }

@@ -9,8 +9,12 @@ import java.math.BigInteger;
 
 public interface ResumeService {
     void create(ResumeDtoIn resumeDtoIn);
+
     void update(BigInteger id, ResumeDtoIn resumeDtoIn);
+
     ResumeDtoOut get(BigInteger id);
+
     PageDtoOut<ResumeDtoOut> list(PageDtoIn pageDtoIn, BigInteger seekerId);
+
     void delete(BigInteger id);
 }

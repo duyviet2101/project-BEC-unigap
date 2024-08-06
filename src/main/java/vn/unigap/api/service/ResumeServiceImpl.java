@@ -3,7 +3,6 @@ package vn.unigap.api.service;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -39,20 +38,15 @@ public class ResumeServiceImpl implements ResumeService {
         if (!jobProvinceRepositoryCustom.checkAllIdsExist(resumeDtoIn.getProvinceIds()))
             throw new ApiException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "Province ids are invalid!");
 
-        resumeRepository.save(Resume.builder()
-                        .seekerId(resumeDtoIn.getSeekerId())
-                        .careerObj(resumeDtoIn.getCareerObj())
-                        .title(resumeDtoIn.getTitle())
-                        .salary(resumeDtoIn.getSalary())
-                        .fields(resumeDtoIn.getFieldIds())
-                        .provinces(resumeDtoIn.getProvinceIds())
-                        .build());
+        resumeRepository.save(Resume.builder().seekerId(resumeDtoIn.getSeekerId()).careerObj(resumeDtoIn.getCareerObj())
+                .title(resumeDtoIn.getTitle()).salary(resumeDtoIn.getSalary()).fields(resumeDtoIn.getFieldIds())
+                .provinces(resumeDtoIn.getProvinceIds()).build());
     }
 
     @Override
     public void update(BigInteger id, ResumeDtoIn resumeDtoIn) {
-        Resume resume = resumeRepository.findById(id)
-                .orElseThrow(() -> new ApiException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "Resume not found!"));
+        Resume resume = resumeRepository.findById(id).orElseThrow(
+                () -> new ApiException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "Resume not found!"));
 
         if (!jobFieldRepositoryCustom.checkAllIdsExist(resumeDtoIn.getFieldIds()))
             throw new ApiException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "Field ids are invalid!");
@@ -66,21 +60,16 @@ public class ResumeServiceImpl implements ResumeService {
 
     @Override
     public ResumeDtoOut get(BigInteger id) {
-        Resume resume = resumeRepository.findById(id)
-                .orElseThrow(() -> new ApiException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "Resume not found!"));
+        Resume resume = resumeRepository.findById(id).orElseThrow(
+                () -> new ApiException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "Resume not found!"));
 
         Seeker seeker = seekerRepository.getSeekerById(resume.getSeekerId());
 
-        return ResumeDtoOut.builder()
-                .id(resume.getId())
-                .seekerId(resume.getSeekerId())
-                .seekerName(seeker == null ? "" : seeker.getName())
-                .careerObj(resume.getCareerObj())
-                .title(resume.getTitle())
-                .salary(resume.getSalary())
+        return ResumeDtoOut.builder().id(resume.getId()).seekerId(resume.getSeekerId())
+                .seekerName(seeker == null ? "" : seeker.getName()).careerObj(resume.getCareerObj())
+                .title(resume.getTitle()).salary(resume.getSalary())
                 .fields(jobFieldRepositoryCustom.getFieldsNameByIds(resume.getFields()))
-                .provinces(jobProvinceRepositoryCustom.getProvinceByIds(resume.getProvinces()))
-                .build();
+                .provinces(jobProvinceRepositoryCustom.getProvinceByIds(resume.getProvinces())).build();
     }
 
     @Override
@@ -98,8 +87,8 @@ public class ResumeServiceImpl implements ResumeService {
 
     @Override
     public void delete(BigInteger id) {
-        Resume resume = resumeRepository.findById(id)
-                .orElseThrow(() -> new ApiException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "Resume not found!"));
+        Resume resume = resumeRepository.findById(id).orElseThrow(
+                () -> new ApiException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "Resume not found!"));
 
         resumeRepository.delete(resume);
     }

@@ -9,7 +9,6 @@ import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,8 +32,7 @@ public class EmployerController extends AbstractResponseController {
     EmployerService employerService;
 
     @Operation(summary = "Lấy danh sách nhà tuyển dụng", responses = {
-            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = ResponsePageEmployer.class)))
-    })
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = ResponsePageEmployer.class))) })
     @GetMapping(value = "")
     public ResponseEntity<?> list(@Valid PageDtoIn pageDtoIn) {
         return responseEntity(() -> {
@@ -43,8 +41,7 @@ public class EmployerController extends AbstractResponseController {
     }
 
     @Operation(summary = "Lấy thông tin employee theo id", responses = {
-            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = EmployerDtoOut.class)))
-    })
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = EmployerDtoOut.class))) })
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> get(@PathVariable(value = "id") BigInteger id) {
         return responseEntity(() -> {
@@ -53,22 +50,20 @@ public class EmployerController extends AbstractResponseController {
     }
 
     @Operation(summary = "Thêm mới nhà tuyển dụng", responses = {
-            @ApiResponse(responseCode = "201", content = @Content(schema = @Schema(implementation = HashMap.class)))
-    })
+            @ApiResponse(responseCode = "201", content = @Content(schema = @Schema(implementation = HashMap.class))) })
     @PostMapping(value = "")
     public ResponseEntity<?> create(@RequestBody @Valid EmployerDtoIn employerDtoIn) {
         return responseEntity(() -> {
-           this.employerService.create(employerDtoIn);
-           return new HashMap<>();
+            this.employerService.create(employerDtoIn);
+            return new HashMap<>();
         }, HttpStatus.CREATED);
     }
 
     @Operation(summary = "Cập nhật nhà tuyển dụng", responses = {
-            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = HashMap.class)))
-    })
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = HashMap.class))) })
     @PutMapping(value = "/{id}")
     public ResponseEntity<?> update(@PathVariable(value = "id") BigInteger id,
-                                    @RequestBody @Valid UpdateEmployerDtoIn updateEmployerDtoIn) {
+            @RequestBody @Valid UpdateEmployerDtoIn updateEmployerDtoIn) {
         return responseEntity(() -> {
             this.employerService.update(id, updateEmployerDtoIn);
             return new HashMap<>();
@@ -76,8 +71,7 @@ public class EmployerController extends AbstractResponseController {
     }
 
     @Operation(summary = "Xóa nhà tuyển dụng", responses = {
-            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = HashMap.class)))
-    })
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = HashMap.class))) })
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> delete(@PathVariable(value = "id") BigInteger id) {
         return responseEntity(() -> {

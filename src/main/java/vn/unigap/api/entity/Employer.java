@@ -6,7 +6,6 @@ import lombok.experimental.FieldDefaults;
 
 import java.io.Serializable;
 import java.math.BigInteger;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity

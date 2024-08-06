@@ -7,7 +7,6 @@ import vn.unigap.api.entity.Seeker;
 
 import java.math.BigInteger;
 import java.util.Date;
-import java.util.List;
 
 @Repository
 public interface SeekerRepository extends JpaRepository<Seeker, BigInteger> {

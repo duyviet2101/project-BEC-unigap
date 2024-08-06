@@ -8,11 +8,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.converter.RsaKeyConverters;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,7 +20,6 @@ import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 
-import javax.crypto.spec.SecretKeySpec;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 
@@ -44,12 +41,13 @@ public class SecurityConfig {
 //        //cross resource/side
 //        httpSecurity.csrf(AbstractHttpConfigurer::disable);
 
-        httpSecurity.cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer
-                .configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues()))
+        httpSecurity
+                .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer
+                        .configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues()))
                 .csrf(cfg -> cfg.disable())
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/auth/login", "auth/register", "/api-docs/**", "/swagger-ui/**")
-                        .permitAll().anyRequest().authenticated())
+                        .requestMatchers("/auth/login", "auth/register", "/api-docs/**", "/swagger-ui/**").permitAll()
+                        .anyRequest().authenticated())
                 .oauth2ResourceServer(configurer -> {
                     configurer.jwt(jwtConfigurer -> {
                         try {
@@ -60,8 +58,7 @@ public class SecurityConfig {
                             throw new RuntimeException(e);
                         }
                     });
-                })
-        ;
+                });
 
         return httpSecurity.build();
     }
@@ -79,7 +76,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder () {
+    public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 

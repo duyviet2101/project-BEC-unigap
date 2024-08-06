@@ -29,24 +29,21 @@ public class JobController extends AbstractResponseController {
     JobService jobService;
 
     @Operation(summary = "Lấy danh sách jobs", responses = {
-            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = ResponsePageJob.class)))
-    })
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = ResponsePageJob.class))) })
     @GetMapping(value = "")
     public ResponseEntity<?> list(@Valid PageDtoIn pageDtoIn, BigInteger employerId) {
         return responseEntity(() -> this.jobService.list(pageDtoIn, employerId));
     }
 
     @Operation(summary = "Lấy thông tin job theo id", responses = {
-            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = JobDtoOut.class)))
-    })
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = JobDtoOut.class))) })
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> get(@PathVariable(value = "id") BigInteger employerId) {
         return responseEntity(() -> this.jobService.get(employerId));
     }
 
     @Operation(summary = "Thêm mới job", responses = {
-            @ApiResponse(responseCode = "201", content = @Content(schema = @Schema(implementation = HashMap.class)))
-    })
+            @ApiResponse(responseCode = "201", content = @Content(schema = @Schema(implementation = HashMap.class))) })
     @PostMapping(value = "")
     public ResponseEntity<?> create(@RequestBody @Valid JobDtoIn jobDtoIn) {
         return responseEntity(() -> {
@@ -56,8 +53,7 @@ public class JobController extends AbstractResponseController {
     }
 
     @Operation(summary = "Cập nhật job", responses = {
-            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = HashMap.class)))
-    })
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = HashMap.class))) })
     @PatchMapping(value = "/{id}")
     public ResponseEntity<?> update(@PathVariable(value = "id") BigInteger id, @RequestBody @Valid JobDtoIn jobDtoIn) {
         return responseEntity(() -> {
@@ -67,8 +63,7 @@ public class JobController extends AbstractResponseController {
     }
 
     @Operation(summary = "Xóa job", responses = {
-            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = HashMap.class)))
-    })
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = HashMap.class))) })
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> delete(@PathVariable BigInteger id) {
         return responseEntity(() -> {

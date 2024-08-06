@@ -29,17 +29,12 @@ public class CustomResponseBodyAdviceAdapter implements ResponseBodyAdvice<Objec
     }
 
     @Override
-    public Object beforeBodyWrite(Object body,
-                                  MethodParameter returnType,
-                                  MediaType selectedContentType,
-                                  Class<? extends HttpMessageConverter<?>> selectedConverterType,
-                                  ServerHttpRequest request,
-                                  ServerHttpResponse response) {
-        if (request instanceof ServletServerHttpRequest
-                && response instanceof ServletServerHttpResponse ) {
+    public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType,
+            Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request,
+            ServerHttpResponse response) {
+        if (request instanceof ServletServerHttpRequest && response instanceof ServletServerHttpResponse) {
             HttpServletRequest req = ((ServletServerHttpRequest) request).getServletRequest();
-            loggingService.logResponse(req, ((ServletServerHttpResponse) response).getServletResponse(),
-                    body);
+            loggingService.logResponse(req, ((ServletServerHttpResponse) response).getServletResponse(), body);
         }
 
         return body;

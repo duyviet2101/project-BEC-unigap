@@ -9,21 +9,20 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Log4j2
-public class LoggingServiceImpl implements LoggingService{
+public class LoggingServiceImpl implements LoggingService {
 
     @Autowired
     private ObjectMapper objectMapper;
 
     @Override
     public void logRequest(HttpServletRequest httpServletRequest, Object body) {
-        log.info("REQUEST: " + httpServletRequest.getRequestURI() +
-                " " + httpServletRequest.getMethod());
+        log.info("REQUEST: " + httpServletRequest.getRequestURI() + " " + httpServletRequest.getMethod());
     }
 
     @Override
-    public void logResponse(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object body) {
-        log.info("RESPONSE: " + httpServletRequest.getRequestURI() +
-                " " + httpServletResponse.getStatus() +
-                " " + httpServletResponse.getContentType());
+    public void logResponse(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
+            Object body) {
+        log.info("RESPONSE: " + httpServletRequest.getRequestURI() + " " + httpServletResponse.getStatus() + " "
+                + httpServletResponse.getContentType());
     }
 }

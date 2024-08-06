@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
-import vn.unigap.common.errorcode.ErrorCode;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)

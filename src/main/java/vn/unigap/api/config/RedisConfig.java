@@ -31,10 +31,11 @@ public class RedisConfig {
     @Bean
     public RedisCacheManager cacheManager(RedisConnectionFactory connectionFactory) {
         RedisCacheConfiguration configurationDefault = RedisCacheConfiguration.defaultCacheConfig()
-                .disableCachingNullValues()
-                .entryTtl(Duration.ofMinutes(1))
-                .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
-                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()));
+                .disableCachingNullValues().entryTtl(Duration.ofMinutes(1))
+                .serializeKeysWith(
+                        RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
+                .serializeValuesWith(RedisSerializationContext.SerializationPair
+                        .fromSerializer(new GenericJackson2JsonRedisSerializer()));
 //                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(genericJackson2JsonRedisSerializer()));
 
 //        return RedisCacheManager.builder(connectionFactory)
@@ -47,7 +48,8 @@ public class RedisConfig {
                 .cacheDefaults(configurationDefault);
 
         cacheNames.getCacheNames().forEach(cacheName -> {
-            builder.withCacheConfiguration(cacheName.getName(), configurationDefault.entryTtl(Duration.ofMinutes(cacheName.getTtl())));
+            builder.withCacheConfiguration(cacheName.getName(),
+                    configurationDefault.entryTtl(Duration.ofMinutes(cacheName.getTtl())));
         });
 
         return builder.build();

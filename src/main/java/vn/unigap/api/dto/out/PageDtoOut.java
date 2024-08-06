@@ -25,12 +25,7 @@ public class PageDtoOut<T> {
 
     public static <T> PageDtoOut<T> from(Integer page, Integer pageSize, Long totalElements, List<T> data) {
         Long totalPages = (long) Math.ceil((double) totalElements / pageSize);
-        return PageDtoOut.<T>builder()
-                .page(page)
-                .pageSize(pageSize)
-                .totalElements(totalElements)
-                .totalPages(totalPages)
-                .data(data)
-                .build();
+        return PageDtoOut.<T>builder().page(page).pageSize(pageSize).totalElements(totalElements).totalPages(totalPages)
+                .data(data).build();
     }
 }

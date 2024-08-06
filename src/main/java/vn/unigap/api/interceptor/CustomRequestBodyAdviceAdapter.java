@@ -24,18 +24,14 @@ public class CustomRequestBodyAdviceAdapter extends RequestBodyAdviceAdapter {
     }
 
     @Override
-    public boolean supports(MethodParameter methodParameter,
-                            Type targetType,
-                            Class<? extends HttpMessageConverter<?>> converterType) {
+    public boolean supports(MethodParameter methodParameter, Type targetType,
+            Class<? extends HttpMessageConverter<?>> converterType) {
         return true;
     }
 
     @Override
-    public Object afterBodyRead(Object body,
-                                HttpInputMessage inputMessage,
-                                MethodParameter parameter,
-                                Type targetType,
-                                Class<? extends HttpMessageConverter<?>> converterType) {
+    public Object afterBodyRead(Object body, HttpInputMessage inputMessage, MethodParameter parameter, Type targetType,
+            Class<? extends HttpMessageConverter<?>> converterType) {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
                 .getRequest();
 

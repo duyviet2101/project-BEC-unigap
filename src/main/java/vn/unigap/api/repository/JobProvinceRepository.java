@@ -9,6 +9,8 @@ import java.util.List;
 @Repository
 public interface JobProvinceRepository extends JpaRepository<JobProvince, Integer> {
     Integer countByIdIn(List<Integer> ids);
+
     boolean existsJobProvinceById(Integer id);
+
     JobProvince getJobProvinceById(Integer id);
 }

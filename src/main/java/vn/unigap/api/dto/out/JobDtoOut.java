@@ -1,12 +1,9 @@
 package vn.unigap.api.dto.out;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import vn.unigap.api.entity.Job;
-import vn.unigap.api.service.EmployerService;
 
 import java.io.Serializable;
 import java.math.BigInteger;
@@ -33,17 +30,10 @@ public class JobDtoOut implements Serializable {
     String employerName;
 
     public static JobDtoOut from(Job job, String employerName) {
-        return JobDtoOut.builder()
-                .id(job.getId())
-                .title(job.getTitle())
-                .employerId(job.getEmployerId())
-                .quantity(job.getQuantity())
-                .description(job.getDescription())
-                .salary(job.getSalary())
+        return JobDtoOut.builder().id(job.getId()).title(job.getTitle()).employerId(job.getEmployerId())
+                .quantity(job.getQuantity()).description(job.getDescription()).salary(job.getSalary())
 //                .fields(job.getFields())
 //                .provinces(job.getProvinces())
-                .employerName(employerName)
-                .expiredAt(job.getExpiredAt())
-                .build();
+                .employerName(employerName).expiredAt(job.getExpiredAt()).build();
     }
 }

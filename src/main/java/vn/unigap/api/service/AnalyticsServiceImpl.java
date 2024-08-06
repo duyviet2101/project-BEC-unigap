@@ -41,18 +41,12 @@ public class AnalyticsServiceImpl implements AnalyticsService {
 
         Employer employer = employerRepository.getEmployerById(job.getEmployerId());
 
-        return AnalyticsJobRecommendationDtoOut
-                .builder()
-                .id(job.getId())
-                .title(job.getTitle())
-                .quantity(job.getQuantity())
-                .fields(jobFieldRepositoryCustom.getFieldsNameByIds(job.getFields()))
-                .provinces(jobProvinceRepositoryCustom.getProvinceByIds(job.getProvinces()))
-                .salary(job.getSalary())
-                .expiredAt(job.getExpiredAt())
-                .employerId(job.getEmployerId())
-                .employerName(employer == null ? null : employer.getName())
-                .seekers(resumeRepositoryCustom.getRecommendationsForJob(job.getSalary(), job.getFields(), job.getProvinces()))
+        return AnalyticsJobRecommendationDtoOut.builder().id(job.getId()).title(job.getTitle())
+                .quantity(job.getQuantity()).fields(jobFieldRepositoryCustom.getFieldsNameByIds(job.getFields()))
+                .provinces(jobProvinceRepositoryCustom.getProvinceByIds(job.getProvinces())).salary(job.getSalary())
+                .expiredAt(job.getExpiredAt()).employerId(job.getEmployerId())
+                .employerName(employer == null ? null : employer.getName()).seekers(resumeRepositoryCustom
+                        .getRecommendationsForJob(job.getSalary(), job.getFields(), job.getProvinces()))
                 .build();
     }
 }
