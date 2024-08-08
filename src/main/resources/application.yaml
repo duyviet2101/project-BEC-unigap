@@ -31,3 +31,6 @@ management:
     web:
       exposure:
         include: '*'
+
+sentry:
+  dsn: "https://fa069c646642dd2d259e0343c1109e0d@o4507739248132096.ingest.de.sentry.io/4507739317862480"
