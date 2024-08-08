@@ -46,7 +46,7 @@ public class SecurityConfig {
                         .configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues()))
                 .csrf(cfg -> cfg.disable())
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/auth/login", "auth/register", "/api-docs/**", "/swagger-ui/**").permitAll()
+                        .requestMatchers("/auth/login", "auth/register", "/api-docs/**", "/swagger-ui/**", "/actuator/**").permitAll()
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(configurer -> {
                     configurer.jwt(jwtConfigurer -> {
