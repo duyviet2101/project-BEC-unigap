@@ -4,6 +4,7 @@ import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
@@ -28,6 +29,12 @@ import java.security.interfaces.RSAPublicKey;
 @EnableMethodSecurity
 @Log4j2
 public class SecurityConfig {
+    private final CustomAuthEntryPoint customAuthEntryPoint;
+
+    @Autowired
+    public SecurityConfig(CustomAuthEntryPoint customAuthEntryPoint) {
+        this.customAuthEntryPoint = customAuthEntryPoint;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -49,6 +56,7 @@ public class SecurityConfig {
                         .requestMatchers("/auth/login", "auth/register", "/api-docs/**", "/swagger-ui/**", "/actuator/**").permitAll()
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(configurer -> {
+                    configurer.authenticationEntryPoint(customAuthEntryPoint);
                     configurer.jwt(jwtConfigurer -> {
                         try {
                             jwtConfigurer.decoder(NimbusJwtDecoder
