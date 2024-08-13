@@ -50,12 +50,12 @@ mvn spring-boot:run
 
 ### Build Docker Image
 ```sh
-docker build -t project-BEC-unigap:latest .
+docker build -t project-java-recruitment-platform:latest .
 ```
 
 ### Run Docker Container
 ```sh
-docker run --network=host -p 8080:8080 project-BEC-unigap:latest
+docker run --network=host -p 8080:8080 project-java-recruitment-platform:latest
 ```
 
 ## Links
