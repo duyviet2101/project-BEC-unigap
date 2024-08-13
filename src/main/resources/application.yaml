@@ -34,3 +34,7 @@ management:
 
 sentry:
   dsn: "https://fa069c646642dd2d259e0343c1109e0d@o4507739248132096.ingest.de.sentry.io/4507739317862480"
+
+telegram:
+  bot-token: ${TELEGRAM_BOT_TOKEN}
+  chat-id: ${TELEGRAM_CHAT_ID}

@@ -133,6 +133,39 @@
 			<version>6.30.0</version>
 		</dependency>
 
+<!--		&lt;!&ndash; https://mvnrepository.com/artifact/org.telegram/telegrambots-spring-boot-starter &ndash;&gt;-->
+<!--		<dependency>-->
+<!--			<groupId>org.telegram</groupId>-->
+<!--			<artifactId>telegrambots-spring-boot-starter</artifactId>-->
+<!--			<version>6.9.7.1</version>-->
+<!--		</dependency>-->
+
+<!--		&lt;!&ndash; https://mvnrepository.com/artifact/org.telegram/telegrambots-abilities &ndash;&gt;-->
+<!--		<dependency>-->
+<!--			<groupId>org.telegram</groupId>-->
+<!--			<artifactId>telegrambots-abilities</artifactId>-->
+<!--			<version>7.7.2</version>-->
+<!--		</dependency>-->
+
+<!--		&lt;!&ndash; https://mvnrepository.com/artifact/org.telegram/telegrambots &ndash;&gt;-->
+<!--		<dependency>-->
+<!--			<groupId>org.telegram</groupId>-->
+<!--			<artifactId>telegrambots</artifactId>-->
+<!--			<version>6.9.7.1</version>-->
+<!--		</dependency>-->
+
+		<dependency>
+			<groupId>org.telegram</groupId>
+			<artifactId>telegrambots-springboot-longpolling-starter</artifactId>
+			<version>7.7.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.telegram</groupId>
+			<artifactId>telegrambots-client</artifactId>
+			<version>7.7.2</version>
+		</dependency>
+
+
 	</dependencies>
 
 	<build>

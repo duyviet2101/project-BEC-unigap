@@ -35,6 +35,8 @@ mvn clean install
 
 ### Run the Project
 ```sh
+export TELEGRAM_BOT_TOKEN=<YOUR_TELEGRAM_BOT_TOKEN>
+export TELEGRAM_CHAT_ID=<YOUR_TELEGRAM_CHAT_ID>
 mvn spring-boot:run
 ```
 
