@@ -1,9 +1,9 @@
-package vn.unigap.api.repository;
+package vn.unigap.api.repository.jpa;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import vn.unigap.api.entity.Seeker;
+import vn.unigap.api.entity.jpa.Seeker;
 
 import java.math.BigInteger;
 import java.util.Date;

@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 import vn.unigap.api.dto.in.DateRangeDtoIn;
 import vn.unigap.api.dto.out.AnalyticsJobRecommendationDtoOut;
 import vn.unigap.api.dto.out.AnalyticsNewsDtoOut;
-import vn.unigap.api.entity.Employer;
-import vn.unigap.api.entity.Job;
-import vn.unigap.api.repository.*;
+import vn.unigap.api.entity.jpa.Employer;
+import vn.unigap.api.entity.jpa.Job;
+import vn.unigap.api.repository.jpa.*;
 import vn.unigap.common.errorcode.ErrorCode;
 import vn.unigap.common.exception.ApiException;
 

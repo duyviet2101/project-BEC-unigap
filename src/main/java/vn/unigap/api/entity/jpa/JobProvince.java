@@ -1,4 +1,4 @@
-package vn.unigap.api.entity;
+package vn.unigap.api.entity.jpa;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,13 +10,13 @@ import lombok.experimental.FieldDefaults;
 import java.io.Serializable;
 
 @Entity
-@Data
 @Builder
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Table(name = "job_field")
-public class JobField implements Serializable {
+@Table(name = "job_province")
+public class JobProvince implements Serializable {
     @Id
     @Column(name = "id")
     Integer id;

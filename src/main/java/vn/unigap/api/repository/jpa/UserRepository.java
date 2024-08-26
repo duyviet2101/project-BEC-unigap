@@ -1,7 +1,7 @@
-package vn.unigap.api.repository;
+package vn.unigap.api.repository.jpa;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import vn.unigap.api.entity.User;
+import vn.unigap.api.entity.jpa.User;
 
 import java.math.BigInteger;
 import java.util.Optional;

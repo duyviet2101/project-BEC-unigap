@@ -4,7 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import vn.unigap.api.dto.in.ResumeDtoIn;
-import vn.unigap.api.entity.Resume;
+import vn.unigap.api.entity.jpa.Resume;
 
 @Mapper(componentModel = "spring")
 public interface ResumeMapper {

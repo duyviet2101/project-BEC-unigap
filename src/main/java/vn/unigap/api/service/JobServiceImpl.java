@@ -11,12 +11,12 @@ import vn.unigap.api.dto.in.JobDtoIn;
 import vn.unigap.api.dto.in.PageDtoIn;
 import vn.unigap.api.dto.out.JobDtoOut;
 import vn.unigap.api.dto.out.PageDtoOut;
-import vn.unigap.api.entity.Job;
+import vn.unigap.api.entity.jpa.Job;
 import vn.unigap.api.mapper.JobMapper;
-import vn.unigap.api.repository.JobFieldRepositoryCustom;
-import vn.unigap.api.repository.JobProvinceRepositoryCustom;
-import vn.unigap.api.repository.JobRepository;
-import vn.unigap.api.repository.JobRepositoryCustom;
+import vn.unigap.api.repository.jpa.JobFieldRepositoryCustom;
+import vn.unigap.api.repository.jpa.JobProvinceRepositoryCustom;
+import vn.unigap.api.repository.jpa.JobRepository;
+import vn.unigap.api.repository.jpa.JobRepositoryCustom;
 import vn.unigap.common.errorcode.ErrorCode;
 import vn.unigap.common.exception.ApiException;
 

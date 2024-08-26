@@ -1,4 +1,4 @@
-package vn.unigap.api.entity;
+package vn.unigap.api.entity.jpa;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -12,35 +12,41 @@ import java.util.Date;
 
 @Entity
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Table(name = "seeker")
-public class Seeker implements Serializable {
+@Table(name = "resume")
+public class Resume implements Serializable {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     BigInteger id;
 
-    @Column(name = "name")
-    String name;
+    @Column(name = "seeker_id")
+    BigInteger seekerId;
 
-    @Column(name = "birthday")
-    String birthday;
+    @Column(name = "career_obj")
+    String careerObj;
 
-    @Column(name = "address")
-    String address;
+    @Column(name = "title")
+    String title;
 
-    @Column(name = "province")
-    Integer province;
+    @Column(name = "salary")
+    Integer salary;
 
-    @CreatedDate
+    @Column(name = "fields")
+    String fields;
+
+    @Column(name = "provinces")
+    String provinces;
+
     @Column(name = "created_at")
+    @CreatedDate
     @Builder.Default
     Date createdAt = new Date();
 
-    @UpdateTimestamp
     @Column(name = "updated_at")
+    @UpdateTimestamp
     Date updatedAt;
 }

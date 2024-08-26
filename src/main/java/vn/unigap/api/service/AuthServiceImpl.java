@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 import vn.unigap.api.dto.in.AuthLoginDtoIn;
 import vn.unigap.api.dto.out.AuthLoginDtoOut;
 import vn.unigap.api.dto.out.AuthRegisterDtoOut;
-import vn.unigap.api.entity.User;
-import vn.unigap.api.repository.UserRepository;
+import vn.unigap.api.entity.jpa.User;
+import vn.unigap.api.repository.jpa.UserRepository;
 import vn.unigap.common.errorcode.ErrorCode;
 import vn.unigap.common.exception.ApiException;
 

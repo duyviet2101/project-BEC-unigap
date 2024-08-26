@@ -3,7 +3,7 @@ package vn.unigap.api.dto.out;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import vn.unigap.api.entity.Employer;
+import vn.unigap.api.entity.jpa.Employer;
 
 import java.math.BigInteger;
 import java.util.Date;

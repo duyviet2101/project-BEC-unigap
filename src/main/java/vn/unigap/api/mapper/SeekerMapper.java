@@ -5,7 +5,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import vn.unigap.api.dto.in.SeekerDtoIn;
 import vn.unigap.api.dto.out.SeekerDtoOut;
-import vn.unigap.api.entity.Seeker;
+import vn.unigap.api.entity.jpa.Seeker;
 
 @Mapper(componentModel = "spring")
 public interface SeekerMapper {

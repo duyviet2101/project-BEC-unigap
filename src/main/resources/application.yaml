@@ -14,6 +14,25 @@ spring:
       host: ${SPRING_DATA_REDIS_HOST:localhost}
       port: ${SPRING_DATA_REDIS_PORT:6379}
       password: ${SPRING_DATA_REDIS_PASSWORD:}
+    mongodb:
+      host: ${SPRING_DATA_MONGODB_HOST:localhost}
+      port: ${SPRING_DATA_MONGODB_PORT:27017}
+      username: ${SPRING_DATA_MONGODB_USERNAME:}
+      password: ${SPRING_DATA_MONGODB_PASSWORD:}
+      database: ${SPRING_DATA_MONGODB_DATABASE:job_db}
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        auto_quote_keyword: true
+    show-sql: true
+
+logging:
+  level:
+    root: INFO
+    org.springframework.security: DEBUG
 
 redis:
   cache-names:

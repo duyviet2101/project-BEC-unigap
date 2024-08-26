@@ -1,4 +1,4 @@
-package vn.unigap.api.repository;
+package vn.unigap.api.repository.jpa;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

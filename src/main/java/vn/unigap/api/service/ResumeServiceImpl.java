@@ -11,10 +11,10 @@ import vn.unigap.api.dto.in.PageDtoIn;
 import vn.unigap.api.dto.in.ResumeDtoIn;
 import vn.unigap.api.dto.out.PageDtoOut;
 import vn.unigap.api.dto.out.ResumeDtoOut;
-import vn.unigap.api.entity.Resume;
-import vn.unigap.api.entity.Seeker;
+import vn.unigap.api.entity.jpa.Resume;
+import vn.unigap.api.entity.jpa.Seeker;
 import vn.unigap.api.mapper.ResumeMapper;
-import vn.unigap.api.repository.*;
+import vn.unigap.api.repository.jpa.*;
 import vn.unigap.common.errorcode.ErrorCode;
 import vn.unigap.common.exception.ApiException;
 
