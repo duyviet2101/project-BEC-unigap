@@ -35,9 +35,7 @@ public class LoggingServiceImpl implements LoggingService {
         if (httpServletRequest.getAttribute(Constants.REQUEST_RESPONSE_ATTRIBUTE) == null) {
             String uuidRequest = Common.uuid();
 
-            requestResponse = RequestResponse.builder()
-                    .uuidRequest(uuidRequest)
-                    .requestAt(Common.currentDateTime())
+            requestResponse = RequestResponse.builder().uuidRequest(uuidRequest).requestAt(Common.currentDateTime())
                     .build();
 
             httpServletRequest.setAttribute(Constants.REQUEST_RESPONSE_ATTRIBUTE, requestResponse);
