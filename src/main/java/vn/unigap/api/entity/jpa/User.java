@@ -17,7 +17,7 @@ import java.math.BigInteger;
 @Table(name = "users")
 public class User implements Serializable {
     @Id
-    @Column(name = "ID")
+    @Column(name = "ID", columnDefinition = "BIGINT")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private BigInteger id;
 

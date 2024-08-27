@@ -19,7 +19,7 @@ import java.util.Date;
 @Table(name = "seeker")
 public class Seeker implements Serializable {
     @Id
-    @Column(name = "id")
+    @Column(name = "id", columnDefinition = "BIGINT")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     BigInteger id;
 

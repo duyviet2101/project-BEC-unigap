@@ -17,7 +17,7 @@ import java.util.Date;
 @Table(name = "JOBS")
 public class Job implements Serializable {
     @Id
-    @Column(name = "id")
+    @Column(name = "id", columnDefinition = "BIGINT")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     BigInteger id;
 
@@ -30,7 +30,7 @@ public class Job implements Serializable {
     @Column(name = "quantity")
     Integer quantity;
 
-    @Column(name = "description")
+    @Column(name = "description", columnDefinition = "TEXT")
     String description;
 
     @Column(name = "salary")

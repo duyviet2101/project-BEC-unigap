@@ -18,7 +18,7 @@ import java.io.Serializable;
 @Table(name = "job_province")
 public class JobProvince implements Serializable {
     @Id
-    @Column(name = "id")
+    @Column(name = "id", columnDefinition = "BIGINT")
     Integer id;
 
     @Column(name = "name")

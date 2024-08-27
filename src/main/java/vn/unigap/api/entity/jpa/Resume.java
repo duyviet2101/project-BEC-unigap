@@ -19,14 +19,14 @@ import java.util.Date;
 @Table(name = "resume")
 public class Resume implements Serializable {
     @Id
-    @Column(name = "id")
+    @Column(name = "id", columnDefinition = "BIGINT")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     BigInteger id;
 
     @Column(name = "seeker_id")
     BigInteger seekerId;
 
-    @Column(name = "career_obj")
+    @Column(name = "career_obj", columnDefinition = "TEXT")
     String careerObj;
 
     @Column(name = "title")
