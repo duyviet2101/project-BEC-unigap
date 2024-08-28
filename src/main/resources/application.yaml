@@ -14,12 +14,14 @@ spring:
       host: ${SPRING_DATA_REDIS_HOST:localhost}
       port: ${SPRING_DATA_REDIS_PORT:6379}
       password: ${SPRING_DATA_REDIS_PASSWORD:}
+      username: ${SPRING_DATA_REDIS_USERNAME:}
     mongodb:
       host: ${SPRING_DATA_MONGODB_HOST:localhost}
       port: ${SPRING_DATA_MONGODB_PORT:27017}
       username: ${SPRING_DATA_MONGODB_USERNAME:}
       password: ${SPRING_DATA_MONGODB_PASSWORD:}
       database: ${SPRING_DATA_MONGODB_DATABASE:job_db}
+      uri: ${SPRING_DATA_MONGODB_URI:mongodb://localhost:27017/job_db}
   jpa:
     database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:
