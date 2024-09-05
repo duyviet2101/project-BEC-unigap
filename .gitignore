@@ -38,3 +38,5 @@ src/main/resources/public.pem
 .env
 
 docker-compose.yml
+
+app.yaml
